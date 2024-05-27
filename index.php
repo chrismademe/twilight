@@ -14,6 +14,7 @@ ini_set('display_errors', 1);
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+$timer = microtime(true);
 $input = file_get_contents(__DIR__ . '/demo-input.twig');
 
 $directives = new Directives;
@@ -28,3 +29,5 @@ $elements = $tree->create();
 
 $compiler = new Compiler();
 echo $compiler->compile($elements);
+
+echo PHP_EOL . 'Execution time: ' . (number_format(microtime(true) - $timer, 4)) . ' seconds' . PHP_EOL;
