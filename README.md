@@ -17,7 +17,7 @@ This project is work in progress. Documentation will come later, below are a few
 ```twig
 <ul>
 	{% for item in items %}
-	<li>{{ item | raw }}</li>
+	    <li>{{ item | raw }}</li>
 	{% endfor %}
 </ul>
 ```
