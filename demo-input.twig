@@ -1,0 +1,25 @@
+<Button variant="black" size="sm" type="submit" @text="Toggle" />
+
+<img @if="showImage" src="/images/ok.png" alt="Okay" />
+<p @if="showRandomText" @text="Just testing!" />
+
+<ul>
+	<li @for="item in items" @html="item" />
+</ul>
+
+<div x-data="{ isOpen: false }">
+	<div class="flex" @click="isOpen = !isOpen">Okay then</div>
+</div>
+
+{# Example #}
+<Flow>
+	<Flow is="form" method="post" action="/submit">
+		<Component is="Alert">Dynamic element!</Component>
+		<!-- Input -->
+		<Input name="name" label="Name" @if="canDoTheThing" :dynamic="prop" />
+		<Button variant="black" size="sm" type="submit">
+			Button
+		</Button>
+		<p @for="warning in warnings">Warning: <span>{{ warning }}</span></p>
+	</Flow>
+</Flow>

@@ -1,0 +1,17 @@
+{
+	"name": "chrismademe/twilight",
+	"version": "0.1.0",
+	"description": "Experimental Twig compiler with support for custom Components",
+	"license": "MIT",
+	"autoload": {
+		"psr-4": {
+			"Twilight\\": "src/"
+		}
+	},
+	"authors": [
+		{
+			"name": "Chris Galbraith",
+			"email": "chris@resknow.co.uk"
+		}
+	]
+}
