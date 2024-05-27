@@ -9,6 +9,9 @@ class HTMLElement implements NodeInterface {
         public string $name
     ) {}
 
+    /**
+     * Render the HTML element to Twig markup.
+     */
     public function render(): string {
         $markup = '';
 
@@ -30,8 +33,6 @@ class HTMLElement implements NodeInterface {
             $markup .= $this->process_directives('after');
             return $markup;
         }
-
-        $markup .= $this->process_directives('content');
 
         if ( $this->has_children() ) {
             foreach ( $this->get_children() as $child ) {

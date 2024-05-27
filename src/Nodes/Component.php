@@ -7,17 +7,21 @@ class Component implements NodeInterface {
 
     private string $ref;
 
-    public function __construct(
-        public string $name,
-    ) {
+    public function __construct( public string $name ) {
+        /**
+         * Generate a unique reference for this component instance.
+         * We use this when creating the Twig markup for child elements.
+         */
         $this->ref = bin2hex( random_bytes(5) );
     }
 
+    /**
+     * Render the component to Twig markup.
+     */
     public function render(): string {
         $markup = sprintf( '<!-- %s [%s] -->%s', $this->name, $this->ref, PHP_EOL );
 
         $markup .= $this->process_directives('before');
-        $markup .= $this->process_directives('content');
 
         if ( $this->has_children() ) {
             $markup .= sprintf( '{%% set %s_%s_children %%}', $this->name, $this->ref );
