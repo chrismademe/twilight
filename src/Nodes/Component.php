@@ -19,7 +19,6 @@ class Component implements NodeInterface {
      * Render the component to Twig markup.
      */
     public function render(): string {
-        $markup = sprintf( '<!-- %s [%s] -->%s', $this->name, $this->ref, PHP_EOL );
 
         $markup .= $this->process_directives('before');
 
@@ -48,16 +47,12 @@ class Component implements NodeInterface {
         }
 
         if ( ! $this->has_attributes() && $this->has_children() ) {
-            $markup .= sprintf( ', { children: %s_%s_children }) }}', $this->name, $this->ref );
+            $markup .= sprintf( ', { children: %s_%s_children', $this->name, $this->ref );
         }
 
-        if ( $this->has_attributes() ) {
-            $markup .= '}) }}';
-        }
+        $markup .= '}) }}';
 
-        $markup .= $this->process_directives('after');
-
-        $markup .= sprintf( '<!-- /%s [%s] -->%s', $this->name, $this->ref, PHP_EOL );
+        $markup .= $this->process_directives('after')
 
         return $markup;
     }
