@@ -52,7 +52,7 @@ class Component implements NodeInterface {
 
         $markup .= '}) }}';
 
-        $markup .= $this->process_directives('after')
+        $markup .= $this->process_directives('after');
 
         return $markup;
     }
