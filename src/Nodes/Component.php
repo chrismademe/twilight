@@ -19,6 +19,7 @@ class Component implements NodeInterface {
      * Render the component to Twig markup.
      */
     public function render(): string {
+        $markup = '';
 
         $markup .= $this->process_directives('before');
 
