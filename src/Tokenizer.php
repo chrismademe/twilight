@@ -8,7 +8,7 @@ class Tokenizer {
     private $position = 0;
     private $length;
 
-    public function __construct( private string $input ) {
+    public function __construct( private string $input, private array $options = [] ) {
         $this->input = trim($input);
         $this->length = strlen($this->input);
     }
@@ -47,6 +47,19 @@ class Tokenizer {
                 switch ($type) {
                     case 'self-closing-component':
                     case 'self-closing-tag':
+
+                        /**
+                         * If the name of the component is in the ignore list, skip it
+                         */
+                        if ( array_key_exists('ignore', $this->options) && in_array($matches[1], $this->options['ignore']) ) {
+                            $token = [
+                                'type' => 'text',
+                                'value' => $matches[0]
+                            ];
+                            $this->position += strlen($matches[0]);
+                            break;
+                        }
+
                         $token = [
                             'type' => $type,
                             'self_closing' => true,
