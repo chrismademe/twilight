@@ -51,7 +51,11 @@ class Component implements NodeInterface {
             $markup .= sprintf( ', { children: %s_%s_children', $this->name, $this->ref );
         }
 
-        $markup .= '}) }}';
+        if ( $this->has_attributes() || $this->has_children() ) {
+            $markup .= '}';
+        }
+
+        $markup .= ') }}';
 
         $markup .= $this->process_directives('after');
 
