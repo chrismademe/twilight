@@ -37,6 +37,8 @@ class NodeTree {
                 'twig-comment' => $this->create_twig_comment_node($token),
                 'end-tag' => $this->handle_closing_tag($token),
             };
+
+            unset($this->tokens[$key]);
         }
 
         return $this->convert($this->tree);

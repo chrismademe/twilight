@@ -19,7 +19,7 @@ class ComponentAttribute {
             ? $this->value
             : sprintf( '"%s"', $this->value );
 
-        return sprintf( '%s: %s', $rendered_name, $rendered_value );
+        return sprintf( '"%s": %s', $rendered_name, $rendered_value );
     }
 
     public function is_dynamic(): bool {

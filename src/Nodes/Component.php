@@ -44,7 +44,7 @@ class Component implements NodeInterface {
         }
 
         if ( $this->has_attributes() && $this->has_children() ) {
-            $markup .= sprintf( ', children: %s_%s_children', $this->name, $this->ref );
+            $markup .= sprintf( ', "children": %s_%s_children', $this->name, $this->ref );
         }
 
         if ( ! $this->has_attributes() && $this->has_children() ) {

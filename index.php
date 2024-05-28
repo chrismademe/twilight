@@ -24,8 +24,11 @@ $directives->register('html', HtmlDirective::class);
 $directives->register('text', TextDirective::class);
 
 $tokenizer = new Tokenizer($input);
+
 $tree = new NodeTree($tokenizer->tokenize(), $directives);
 $elements = $tree->create();
+
+// print_r($elements);
 
 $compiler = new Compiler();
 echo $compiler->compile($elements);
