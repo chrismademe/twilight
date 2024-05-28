@@ -11,7 +11,15 @@ class HTMLAttribute {
     }
 
     public function render(): string {
-        return sprintf( '%s="%s"', $this->name, $this->value );
+        $rendered_name = $this->is_dynamic()
+            ? substr( $this->name, 1 )
+            : $this->name;
+
+        $rendered_value = $this->is_dynamic()
+            ? sprintf( '"{{ %s }}"', $this->value )
+            : sprintf( '"%s"', $this->value );
+
+        return sprintf( '%s=%s', $rendered_name, $rendered_value );
     }
 
     public function is_dynamic(): bool {

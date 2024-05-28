@@ -1,6 +1,7 @@
 <Button variant="black" size="sm" type="submit" @text="Toggle" />
 
-<img @if="showImage" src="/images/ok.png" alt="Okay" />
+{% set image = "/images/ok.png" %}
+<img @if="showImage" :src="image" alt="Okay" />
 <p @if="showRandomText" @text="Just testing!" />
 
 <ul>
