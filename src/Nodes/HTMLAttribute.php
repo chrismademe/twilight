@@ -4,7 +4,7 @@ namespace Twilight\Nodes;
 
 class HTMLAttribute {
 
-    public function __construct( private string $name, private string $value ) {}
+    public function __construct( private string $name, private $value ) {}
 
     public function __get( string $key ) {
         return $this->$key;
@@ -16,10 +16,14 @@ class HTMLAttribute {
             : $this->name;
 
         $rendered_value = $this->is_dynamic()
-            ? sprintf( '"{{ %s }}"', $this->value )
-            : sprintf( '"%s"', $this->value );
+            ? sprintf( '="{{ %s }}"', $this->value )
+            : sprintf( '="%s"', $this->value );
 
-        return sprintf( '%s=%s', $rendered_name, $rendered_value );
+        if ( is_null($this->value) ) {
+            $rendered_value = '';
+        }
+
+        return sprintf( '%s%s', $rendered_name, $rendered_value );
     }
 
     public function is_dynamic(): bool {

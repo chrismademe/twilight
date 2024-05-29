@@ -122,11 +122,16 @@ class Tokenizer {
         $attributes = [];
 
         if (!empty($string)) {
-            preg_match_all('/\s*([a-zA-Z0-9-_:.@]+)\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|\{([^}]*)\}|([^\s>]+))/', $string, $matches, PREG_SET_ORDER);
+            preg_match_all('/\s*([a-zA-Z0-9-_:.@]+)(\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|\{([^}]*)\}|([^\s>]+)))?/', $string, $matches, PREG_SET_ORDER);
 
             foreach ($matches as $attr) {
+
                 // Check for double quoted, single quoted, curly brace or unquoted attribute values
-                $value = $attr[2] ?? $attr[3] ?? $attr[4] ?? $attr[5] ?? true;
+                $value = $attr[3] ?? $attr[4] ?? $attr[5] ?? $attr[6] ?? true;
+
+                // If the attribute value is null, remove it
+                if ($value === "null") continue;
+
                 $attributes[$attr[1]] = $value;
             }
         }

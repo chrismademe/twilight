@@ -4,7 +4,7 @@ namespace Twilight\Nodes;
 
 class ComponentAttribute {
 
-    public function __construct( private string $name, private string $value ) {}
+    public function __construct( private string $name, private $value ) {}
 
     public function __get( string $key ) {
         return $this->$key;

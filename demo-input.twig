@@ -1,7 +1,18 @@
-<BlockWrapper :attributes="attributes" :block="block" :preview="is_preview">
-    <footer class="flex flex-col items-center gap-2 text-center py-16">
-        <p class="text-gray-500 text-sm">&copy; {{ globals.company_name }}, {{ util.year }}</p>
-        <DesignedBy />
-		<InnerBlocks />
-    </footer>
-</BlockWrapper>
+{% set tagName = href ? 'a' : 'button' %}
+
+<Element
+    :is="tagName"
+	:class="['btn', class] | join(' ')"
+	:data-variant="variant"
+	:data-size="size"
+	:data-icon-position="iconPosition"
+	:data-has-icon="icon ? 'true' : 'false'"
+	:href="href"
+	:type="type"
+	@attributes
+>
+	<Icon @if="icon" :name="icon" class="w-5 h-5" />
+	{{ children | raw }}
+</Element>
+
+<CustomComponent @attributes @for="item in fields.items" :title="item.title" />

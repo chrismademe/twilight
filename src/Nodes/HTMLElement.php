@@ -3,11 +3,19 @@
 namespace Twilight\Nodes;
 
 class HTMLElement implements NodeInterface {
-    use CanBeSelfClosing, HasHTMLAttributes, HasChildren, HasDirectives;
+    use CanBeSelfClosing, CanHaveDynamicName, HasHTMLAttributes, HasChildren, HasDirectives;
+
+    public string $ref;
 
     public function __construct(
         public string $name
-    ) {}
+    ) {
+        /**
+         * Generate a unique reference for this element instance.
+         * We use this when creating the Twig markup for child elements.
+         */
+        $this->ref = bin2hex( random_bytes(5) );
+    }
 
     /**
      * Render the HTML element to Twig markup.
@@ -17,7 +25,9 @@ class HTMLElement implements NodeInterface {
 
         $markup .= $this->process_directives('before');
 
-        $markup .= sprintf( '<%s', $this->name );
+        $markup .= $this->has_dynamic_name()
+            ? sprintf( '<{{ %s }}', $this->dynamic_name )
+            : sprintf( '<%s', $this->name );
 
         if ( $this->has_attributes() ) {
             foreach ( $this->attributes as $attribute ) {
@@ -40,7 +50,9 @@ class HTMLElement implements NodeInterface {
             }
         }
 
-        $markup .= sprintf( '</%s>%s', $this->name, PHP_EOL );
+        $markup .= $this->has_dynamic_name()
+            ? sprintf( '</{{ %s }}>%s', $this->dynamic_name, PHP_EOL )
+            : sprintf( '</%s>%s', $this->name, PHP_EOL );
 
         $markup .= $this->process_directives('after');
 

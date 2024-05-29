@@ -8,6 +8,7 @@ use Twilight\Directives\IfDirective;
 use Twilight\Directives\ForDirective;
 use Twilight\Directives\HtmlDirective;
 use Twilight\Directives\TextDirective;
+use Twilight\Directives\AttributesDirective;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -19,9 +20,11 @@ $input = file_get_contents(__DIR__ . '/demo-input.twig');
 
 $directives = new Directives;
 $directives->register('if', IfDirective::class);
+$directives->register('attributes', AttributesDirective::class);
 $directives->register('for', ForDirective::class);
 $directives->register('html', HtmlDirective::class);
 $directives->register('text', TextDirective::class);
+
 
 $tokenizer = new Tokenizer($input);
 

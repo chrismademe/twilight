@@ -5,7 +5,7 @@ namespace Twilight\Nodes;
 class Component implements NodeInterface {
     use HasComponentAttributes, HasChildren, HasDirectives;
 
-    private string $ref;
+    public string $ref;
 
     public function __construct( public string $name ) {
         /**

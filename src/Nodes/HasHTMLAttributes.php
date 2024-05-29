@@ -15,7 +15,7 @@ trait HasHTMLAttributes {
         return ! empty( $this->attributes );
     }
 
-    public function set_attribute( string $key, string $value ): void {
+    public function set_attribute( string $key, $value ): void {
         $this->attributes[ $key ] = new HTMLAttribute($key, $value);
     }
 

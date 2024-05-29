@@ -58,27 +58,33 @@ class NodeTree {
              * for this to work, we'll need to process attributes before anything else
              * so that conditionals and such can be used in the attributes
              */
-            if ( isset($element['name']) && $element['name'] === 'Component' ) {
+            if ( isset($element['name']) && ( $element['name'] === 'Component' || $element['name'] === 'Element' ) ) {
                 $is_self_closing = $element['type'] === 'self-closing-component';
-                $is = $element['attributes']['is'];
+                $is_dynamic = isset( $element['attributes'][':is'] );
+                $is = $element['attributes'][':is'] ?? $element['attributes']['is'];
 
-                if ( $is_self_closing ) {
-                    $element['type'] = ctype_upper($is[0])
-                        ? 'self-closing-component'
-                        : 'self-closing-tag';
+                // Set element type
+                if ( $element['name'] === 'Element' ) {
+                    $element['type'] = $is_self_closing ? 'self-closing-tag' : 'tag';
                 } else {
-                    $element['type'] = ctype_upper($is[0])
-                        ? 'component'
-                        : 'tag';
+                    $element['type'] = $is_self_closing ? 'self-closing-component' : 'component';
                 }
 
-                $element['name'] = $is;
+                if ( $is_dynamic ) {
+                    $element['dynamic_name'] = $is;
+                } else {
+                    $element['name'] = $is;
+                }
             }
 
             if ( $element['type'] === 'tag' || $element['type'] === 'self-closing-tag' ) {
                 $html_element = new HTMLElement($element['name']);
                 $html_element->set_attributes($element['attributes']);
                 $html_element->set_directives($this->directives);
+
+                if ( isset( $element['dynamic_name'] ) ) {
+                    $html_element->set_dynamic_name($element['dynamic_name']);
+                }
 
                 if ( isset( $element['children'] ) ) {
                     $html_element->set_children($this->convert($element['children']));
@@ -92,6 +98,10 @@ class NodeTree {
                 $component = new Component($element['name']);
                 $component->set_attributes($element['attributes']);
                 $component->set_directives($this->directives);
+
+                if ( isset( $element['dynamic_name'] ) ) {
+                    $component->set_dynamic_name($element['dynamic_name']);
+                }
 
                 if ( isset( $element['children'] ) ) {
                     $component->set_children($this->convert($element['children']));
