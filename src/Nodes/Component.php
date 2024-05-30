@@ -81,7 +81,7 @@ class Component implements NodeInterface {
             $markup .= implode(', ', $props);
         }
 
-        if ( $this->has_attributes() || $this->has_children() ) {
+        if ( $this->has_attributes() || $this->has_children() || $this->has_slots() ) {
             $markup .= ' }';
         }
 
