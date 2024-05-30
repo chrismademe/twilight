@@ -19,7 +19,7 @@ class HTMLAttribute {
             ? sprintf( '="{{ %s }}"', $this->value )
             : sprintf( '="%s"', $this->value );
 
-        if ( is_null($this->value) ) {
+        if ( is_null($this->value) || $this->value === true ) {
             $rendered_value = '';
         }
 
