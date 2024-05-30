@@ -50,7 +50,7 @@ class AttributesDirective extends Directive {
         $markup .= '{{ name }}="{{ value }}" ';
         $markup .= '{% endfor %}';
         $markup .= '{% else %}';
-        $markup .= sprintf( '{{ %s }}', $attributes );
+        $markup .= sprintf( '{{ %s | raw }}', $attributes );
         $markup .= '{% endif %}';
         $markup .= sprintf( '{%% endset %%}%s', PHP_EOL );
 
