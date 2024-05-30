@@ -61,7 +61,7 @@ class Tokenizer {
                         }
 
                         $token = [
-                            'type' => $type,
+                            'type' => $matches[1] === 'Slot' ? 'slot' : $type,
                             'self_closing' => true,
                             'name' => $matches[1],
                             'value' => $matches[0],
@@ -71,7 +71,7 @@ class Tokenizer {
                     case 'component':
                     case 'tag':
                         $token = [
-                            'type' => $type,
+                            'type' => $matches[1] === 'Slot' ? 'slot' : $type,
                             'name' => $matches[1],
                             'value' => $matches[0],
                             'attributes' => isset($matches[2]) ? $this->parse_attributes($matches[2]) : null

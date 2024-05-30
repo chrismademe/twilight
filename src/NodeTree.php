@@ -104,7 +104,8 @@ class NodeTree {
                 }
 
                 if ( isset( $element['children'] ) ) {
-                    $component->set_children($this->convert($element['children']));
+                    $children = $this->parse_slots($element, $component);
+                    $component->set_children($this->convert($children));
                 }
 
                 $pieces[] = $component;
@@ -211,6 +212,29 @@ class NodeTree {
             $this->current = &$this->stack[count($this->stack) - 1];
             array_pop($this->stack);
         }
+    }
+
+    /**
+     * Get Slots
+     *
+     * @param array $element
+     * @return array
+     */
+    private function parse_slots( array $element, Component $component ) {
+        $slots = array_filter($element['children'], fn($child) => $child['type'] === 'slot');
+
+        if ( empty($slots) ) {
+            return $element['children'];
+        }
+
+        foreach ( $slots as $slot ) {
+            $slot_name = $slot['attributes']['name'];
+            $component->set_slot($slot_name, $this->convert($slot['children']));
+        }
+
+        $children = array_filter($element['children'], fn($child) => $child['type'] !== 'slot');
+
+        return $children;
     }
 
 }
