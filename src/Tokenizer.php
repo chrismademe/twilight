@@ -33,9 +33,9 @@ class Tokenizer {
     private function match_token() {
         $patterns = [
             'self-closing-component' => '/^<([A-Z][a-zA-Z0-9-]*)([^>]*)\/>/s',
-            'self-closing-tag' => '/^<([a-z][a-z0-9-]*)([^>]*)\/>/s',
+            'self-closing-tag' => '/^<([a-z][a-zA-Z0-9-]*)([^>]*)\/>/s',
             'component' => '/^<([A-Z][a-zA-Z0-9-]*)([^>]*)>/s',
-            'tag' => '/^<([a-z][a-z0-9-]*)([^>]*)>/s',
+            'tag' => '/^<([a-z][a-zA-Z0-9-]*)([^>]*)>/s',
             'end-tag' => '/^<\/([a-zA-Z0-9-]+)>/s',
             'html-comment' => '/^<!--(.*?)-->/s',
             'twig-comment' => '/^{#(.*?)(#})/s',
