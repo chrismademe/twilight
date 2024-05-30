@@ -13,12 +13,11 @@ trait HasDirectives {
     }
 
     public function has_directive(string $name): bool {
-        $name = str_starts_with($name, '@') ? $name : '@' . $name;
         return $this->directives->is_registered($name);
     }
 
     public function is_directive(string $name): bool {
-        return $this->has_directive($name);
+        return str_starts_with($name, '@') && $this->has_directive(ltrim($name, '@'));
     }
 
     public function process_directives(string $method): string {

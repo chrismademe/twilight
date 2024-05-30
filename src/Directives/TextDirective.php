@@ -30,7 +30,7 @@ class TextDirective extends Directive {
     public function before( Component|HTMLElement $element ) {
         $content = $element->get_attribute('@text');
         $element->set_children([
-            new Text($content->value)
+            new Text(sprintf('{{ %s }}', $content->value))
         ]);
     }
 
