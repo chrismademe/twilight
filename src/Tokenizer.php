@@ -32,6 +32,7 @@ class Tokenizer {
      */
     private function match_token() {
         $patterns = [
+            'doctype' => '/^<!(.*?)>/s',
             'self-closing-component' => '/^<([A-Z][a-zA-Z0-9-]*)([^>]*)\/>/s',
             'self-closing-tag' => '/^<([a-z][a-zA-Z0-9-]*)([^>]*)\/>/s',
             'component' => '/^<([A-Z][a-zA-Z0-9-]*)([^>]*)>/s',
@@ -91,6 +92,7 @@ class Tokenizer {
                             'value' => $matches[0]
                         ];
                         break;
+                    case 'doctype':
                     case 'text':
                         if (trim($matches[0]) !== '') {
                             $token = [
