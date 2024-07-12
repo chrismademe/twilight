@@ -57,7 +57,14 @@ class Tokenizer {
                                 'type' => 'text',
                                 'value' => $matches[0]
                             ];
-                            $this->position += strlen($matches[0]);
+
+                            /**
+                             * Skip over the entire self-closing component tag
+                             * and move the position to the end of the tag
+                             *
+                             * The -2 is to account for the /> at the end of the tag
+                             */
+                            $this->position += strlen($matches[0]) - 2;
                             break;
                         }
 
