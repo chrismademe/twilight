@@ -31,6 +31,7 @@ class HTMLElement implements NodeInterface {
 
         if ( $this->has_attributes() ) {
             foreach ( $this->attributes as $attribute ) {
+                if ( $this->is_compiler_attribute($attribute->name) ) continue; // Skip compiler attributes
                 if ( $this->is_directive($attribute->name) ) continue; // Skip directives
                 $markup .= sprintf( ' %s', $attribute->render());
             }

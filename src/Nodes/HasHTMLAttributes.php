@@ -30,4 +30,8 @@ trait HasHTMLAttributes {
     public function has_attribute( string $key ): bool {
         return isset( $this->attributes[ $key ] );
     }
+
+    public function is_compiler_attribute( string $key ): bool {
+        return in_array( $key, [ 'is' ] );
+    }
 }
