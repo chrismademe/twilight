@@ -1,15 +1,23 @@
 <!doctype html>
 <html>
-    <head>
-        <title>Demo</title>
-    </head>
-    <body>
+	<head>
+		<title>Demo</title>
+	</head>
+	<body>
 
-        <div class="container">
-            <div class="container__content">
-                <InnerBlocks />
-            </div>
-        </div>
+		<Magical>
+			Nice.
+		</Magical>
 
-    </body>
+		<div x-data="{ isOpen: false }">
+			<button type="button" x-on:click="isOpen = !isOpen">Toggle</button>
+		</div>
+
+		<div class="container">
+			<div class="container__content flex items-center gap-2 bg-green-500 text-white" data-example>
+				<InnerBlocks/>
+			</div>
+		</div>
+
+	</body>
 </html>
