@@ -25,11 +25,12 @@ $directives->register('html', HtmlDirective::class);
 $directives->register('text', TextDirective::class);
 
 $input = file_get_contents(__DIR__ . '/demo-input.twig');
-$tokenizer = new Tokenizer($input, [
+$tokenizer = new Tokenizer($input);
+
+$tree = new NodeTree($tokenizer->tokenize(), [
+    'directives' => $directives,
     'ignore' => ['InnerBlocks']
 ]);
-
-$tree = new NodeTree($tokenizer->tokenize(), $directives);
 $elements = $tree->create();
 
 print_r($elements);

@@ -48,26 +48,6 @@ class Tokenizer {
                 switch ($type) {
                     case 'self-closing-component':
                     case 'self-closing-tag':
-
-                        /**
-                         * If the name of the component is in the ignore list, skip it
-                         */
-                        if ( array_key_exists('ignore', $this->options) && in_array($matches[1], $this->options['ignore']) ) {
-                            $token = [
-                                'type' => 'text',
-                                'value' => $matches[0]
-                            ];
-
-                            /**
-                             * Skip over the entire self-closing component tag
-                             * and move the position to the end of the tag
-                             *
-                             * The -2 is to account for the /> at the end of the tag
-                             */
-                            $this->position += strlen($matches[0]) - 2;
-                            break;
-                        }
-
                         $token = [
                             'type' => $matches[1] === 'Slot' ? 'slot' : $type,
                             'self_closing' => true,

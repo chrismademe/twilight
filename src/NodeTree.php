@@ -12,11 +12,14 @@ use Twilight\Nodes\TwigComment;
 
 class NodeTree {
 
+    private Directives $directives;
     private array|null $current = [];
     private array $tree = [];
     private array $stack = [];
 
-    public function __construct( private array $tokens, private Directives $directives ) {}
+    public function __construct( private array $tokens, private array $options ) {
+        $this->directives = $options['directives'] ?? new Directives;
+    }
 
     /**
      * Create a tree structure from the tokens
@@ -95,6 +98,15 @@ class NodeTree {
             }
 
             if ( in_array( $element['type'], ['component', 'self-closing-component', 'slot', 'self-closing-slot']) ) {
+
+                /**
+                 * Treat ignored elements like text
+                 */
+                if ( array_key_exists( 'ignore', $this->options ) && in_array( $element['name'], $this->options['ignore'] ) ) {
+                    $pieces[] = new Text($element['value']);
+                    continue;
+                }
+
                 $component = new Component($element['name']);
                 $component->set_attributes($element['attributes']);
                 $component->set_directives($this->directives);
