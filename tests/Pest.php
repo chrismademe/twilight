@@ -59,7 +59,10 @@ function compile( string $input ): string
     $directives->register('text', TextDirective::class);
 
     $tokenizer = new Tokenizer($input);
-    $tree = new NodeTree($tokenizer->tokenize(), $directives);
+    $tree = new NodeTree($tokenizer->tokenize(), [
+        'ignore' => ['InnerBlocks'],
+        'directives' => $directives
+    ]);
     $elements = $tree->create();
     $compiler = new Compiler();
     return $compiler->compile($elements);

@@ -23,3 +23,11 @@ test('self closing component with dynamic attributes renders correctly', functio
 
     expect($compiled_input)->toEqual($output);
 });
+
+test('ignored components renders as a string', function () {
+    $input = file_get_contents(__DIR__ . '/input/component/04-ignored-component.twig');
+    $output = file_get_contents(__DIR__ . '/output/component/04-ignored-component.twig');
+    $compiled_input = compile($input);
+
+    expect($compiled_input)->toEqual($output);
+});
