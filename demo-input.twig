@@ -2,8 +2,9 @@
     <SectionHeader>
         <Slot name="heading">
             <div @if="hasInnerBlocks">
-                <InnerBlocks template="{{ esc_attr( json_encode( ['core/paragraph'] ) ) }}" />
+                <InnerBlocks :template="esc_attr( json_encode( ['core/paragraph'] ) )" />
             </div>
         </Slot>
+        <h1 @if="not hasInnerBlocks" @html="defaultHeading" />
     </SectionHeader>
 </BlockWrapper>
