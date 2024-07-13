@@ -16,9 +16,26 @@ class NodeTree {
     private array|null $current = [];
     private array $tree = [];
     private array $stack = [];
+    private array $self_closing_elements = [];
 
     public function __construct( private array $tokens, private array $options ) {
         $this->directives = $options['directives'] ?? new Directives;
+        $this->self_closing_elements = [
+            'area',
+            'base',
+            'br',
+            'col',
+            'embed',
+            'hr',
+            'img',
+            'input',
+            'link',
+            'meta',
+            'param',
+            'source',
+            'track',
+            'wbr',
+        ];
     }
 
     /**
@@ -80,8 +97,23 @@ class NodeTree {
                 }
             }
 
+            /**
+             * Ignored components are treated like HTML elements and we will render them as such
+             */
+            if (
+                in_array( $element['type'], ['component', 'self-closing-component'] )
+                && array_key_exists( 'ignore', $this->options )
+                && in_array( $element['name'], $this->options['ignore'] )
+            ) {
+                $element['type'] = $element['type'] === 'self-closing-component' ? 'self-closing-tag' : 'tag';
+
+                if ( $element['type'] === 'self-closing-tag' ) {
+                    $this->self_closing_elements[] = $element['name'];
+                }
+            }
+
             if ( $element['type'] === 'tag' || $element['type'] === 'self-closing-tag' ) {
-                $html_element = new HTMLElement($element['name']);
+                $html_element = new HTMLElement($element['name'], in_array($element['name'], $this->self_closing_elements));
                 $html_element->set_attributes($element['attributes']);
                 $html_element->set_directives($this->directives);
 
@@ -98,14 +130,6 @@ class NodeTree {
             }
 
             if ( in_array( $element['type'], ['component', 'self-closing-component', 'slot', 'self-closing-slot']) ) {
-
-                /**
-                 * Treat ignored elements like text
-                 */
-                if ( array_key_exists( 'ignore', $this->options ) && in_array( $element['name'], $this->options['ignore'] ) ) {
-                    $pieces[] = new Text($element['value']);
-                    continue;
-                }
 
                 $component = new Component($element['name']);
                 $component->set_attributes($element['attributes']);

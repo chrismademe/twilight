@@ -8,7 +8,8 @@ class HTMLElement implements NodeInterface {
     public string $ref;
 
     public function __construct(
-        public string $name
+        public string $name,
+        public bool $is_self_closing = false,
     ) {
         /**
          * Generate a unique reference for this element instance.
@@ -37,7 +38,7 @@ class HTMLElement implements NodeInterface {
             }
         }
 
-        $markup .= '>';
+        $markup .= ctype_upper($this->name[0]) ? ' />' : '>';
 
         // Self closing elements cannot have children, so we're done
         if ( $this->is_self_closing() ) {
