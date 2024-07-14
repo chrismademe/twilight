@@ -39,3 +39,11 @@ test('html directives renders correctly', function () {
 
     expect($compiled_input)->toEqual($output);
 });
+
+test('dynamic html correctly closes', function () {
+    $input = file_get_contents(__DIR__ . '/input/html/06-dynamic-element-correctly-closes.twig');
+    $output = file_get_contents(__DIR__ . '/output/html/06-dynamic-element-correctly-closes.twig');
+    $compiled_input = compile($input);
+
+    expect($compiled_input)->toEqual($output);
+});
