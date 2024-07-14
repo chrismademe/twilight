@@ -38,7 +38,7 @@ class HTMLElement implements NodeInterface {
             }
         }
 
-        $markup .= ctype_upper($this->name[0]) ? ' />' : '>';
+        $markup .= $this->is_self_closing ? ' />' : '>';
 
         // Self closing elements cannot have children, so we're done
         if ( $this->is_self_closing() ) {

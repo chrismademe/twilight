@@ -85,7 +85,8 @@ class NodeTree {
 
                 // Set element type
                 if ( $element['name'] === 'Element' ) {
-                    $element['type'] = $is_self_closing ? 'self-closing-tag' : 'tag';
+                    $element['type'] = 'tag';
+                    $is_self_closing = false;
                 } else {
                     $element['type'] = $is_self_closing ? 'self-closing-component' : 'component';
                 }

@@ -1,10 +1,11 @@
-<BlockWrapper :attributes="attributes" :block="block" :preview="is_preview">
-    <SectionHeader>
-        <Slot name="heading">
-            <div @if="hasInnerBlocks">
-                <InnerBlocks :template="esc_attr( json_encode( ['core/paragraph'] ) )" />
-            </div>
-        </Slot>
-        <h1 @if="not hasInnerBlocks" @html="defaultHeading" />
-    </SectionHeader>
-</BlockWrapper>
+<Element
+    :is="href ? 'a' : 'button'"
+    :href="href"
+    @html="'Button'"
+/>
+
+<InnerBlocks />
+
+<img src="https://unsplash.it/ok" />
+
+<br />
