@@ -1,5 +1,5 @@
 <Element is="img" src="https://unsplash.it/ok" />
-<Element is="span" @html="'Hello World'" />
+<Element :is="elementType == 'span' ? 'span' : 'p'" @html="'Hello World'" />
 
 <Container>
     <Children />

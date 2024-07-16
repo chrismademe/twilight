@@ -94,6 +94,8 @@ class NodeTree {
                 $is_dynamic = isset( $element['attributes'][':is'] );
                 $is = $element['attributes'][':is'] ?? $element['attributes']['is'];
 
+                unset( $element['attributes'][':is'], $element['attributes']['is'] );
+
                 // Set element type
                 if ( $element['name'] === 'Element' ) {
                     $element['type'] = 'tag';
