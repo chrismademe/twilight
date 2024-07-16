@@ -73,6 +73,17 @@ class NodeTree {
         foreach ( $elements as $element ) {
 
             /**
+             * The "Children" component is a special component that is used to render
+             * the children of a component. It is used internally by the framework
+             *
+             * We will replace it directly here with a Text node.
+             */
+            if ( in_array( $element['type'], ['self-closing-component', 'component'] ) && $element['name'] === 'Children' ) {
+                $pieces[] = new Text('{{ children | raw }}');
+                continue;
+            }
+
+            /**
              * Note
              *
              * for this to work, we'll need to process attributes before anything else
