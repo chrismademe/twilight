@@ -4,6 +4,7 @@ namespace Twilight\Nodes;
 
 trait CanHaveDynamicName {
 
+    public string $render_name;
     public string $dynamic_name;
 
     public function has_dynamic_name(): bool {

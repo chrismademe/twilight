@@ -1,6 +1,7 @@
-<Element is="img" src="https://unsplash.it/ok" />
-<Element :is="elementType == 'span' ? 'span' : 'p'" @html="'Hello World'" />
+{% set componentToRender = 'Logo' %}
 
-<Container>
-    <Children />
-</Container>
+<Component
+    :is="shouldBeLogo ? 'Logo' : 'Input'"
+/>
+
+<Logo />

@@ -3,7 +3,7 @@
 namespace Twilight\Nodes;
 
 class Component implements NodeInterface {
-    use HasComponentAttributes, HasChildren, HasDirectives, HasSlots;
+    use CanHaveDynamicName, HasComponentAttributes, HasChildren, HasDirectives, HasSlots;
 
     public string $ref;
 
@@ -23,9 +23,13 @@ class Component implements NodeInterface {
 
         $markup .= $this->process_directives('before');
 
+        $this->render_name = $this->has_dynamic_name()
+            ? $this->dynamic_name
+            : $this->name;
+
         if ( $this->has_slots() ) {
             foreach ( $this->get_slots() as $slot ) {
-                $markup .= sprintf( '{%% set %s_%s_slot_%s %%}', $this->name, $this->ref, $slot->name );
+                $markup .= sprintf( '{%% set %s_%s_slot_%s %%}', $this->render_name, $this->ref, $slot->name );
                 foreach ( $slot->value as $child ) {
                     $markup .= sprintf( '%1$s%2$s%1$s', PHP_EOL, $child->render() );
                 }
@@ -33,23 +37,27 @@ class Component implements NodeInterface {
             }
 
             $slot_variables = array_map( function($slot) {
-                return sprintf( '"%s": %s_%s_slot_%s', $slot->name, $this->name, $this->ref, $slot->name );
+                return sprintf( '"%s": %s_%s_slot_%s', $slot->name, $this->render_name, $this->ref, $slot->name );
             }, $this->get_slots() );
 
-            $markup .= sprintf( '{%% set %s_%s_slots = { ', $this->name, $this->ref );
+            $markup .= sprintf( '{%% set %s_%s_slots = { ', $this->render_name, $this->ref );
             $markup .= implode(', ', $slot_variables);
             $markup .= ' } %}';
         }
 
         if ( $this->has_children() ) {
-            $markup .= sprintf( '{%% set %s_%s_children %%}', $this->name, $this->ref );
+            $markup .= sprintf( '{%% set %s_%s_children %%}', $this->render_name, $this->ref );
             foreach ( $this->get_children() as $child ) {
                 $markup .= sprintf( '%1$s%2$s%1$s', PHP_EOL, $child->render() );
             }
             $markup .= '{% endset %}';
         }
 
-        $markup .= sprintf( '{{ render_component("%s"', $this->name );
+        $name = $this->has_dynamic_name()
+            ? $this->render_name
+            : sprintf( '"%s"', $this->render_name );
+
+        $markup .= sprintf( '{{ render_component(%s', $name );
 
         if ( $this->has_attributes() ) {
             $attributes = [];
@@ -70,11 +78,11 @@ class Component implements NodeInterface {
         }
 
         if ( $this->has_slots() ) {
-            $props['slots'] = sprintf( '"slots": %s_%s_slots', $this->name, $this->ref );
+            $props['slots'] = sprintf( '"slots": %s_%s_slots', $this->render_name, $this->ref );
         }
 
         if ( $this->has_children() ) {
-            $props['children'] = sprintf( '"children": %s_%s_children', $this->name, $this->ref );
+            $props['children'] = sprintf( '"children": %s_%s_children', $this->render_name, $this->ref );
         }
 
         if ( isset($props) ) {

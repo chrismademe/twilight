@@ -23,6 +23,10 @@ class HTMLAttribute {
             $rendered_value = '';
         }
 
+        if ( $this->value === false ) {
+            return '';
+        }
+
         return sprintf( '%s%s', $rendered_name, $rendered_value );
     }
 
