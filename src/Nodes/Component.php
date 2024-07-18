@@ -23,9 +23,7 @@ class Component implements NodeInterface {
 
         $markup .= $this->process_directives('before');
 
-        $this->render_name = $this->has_dynamic_name()
-            ? $this->dynamic_name
-            : $this->name;
+        $this->render_name = $this->render_name();
 
         if ( $this->has_slots() ) {
             foreach ( $this->get_slots() as $slot ) {
@@ -98,5 +96,20 @@ class Component implements NodeInterface {
         $markup .= $this->process_directives('after');
 
         return $markup;
+    }
+
+    /**
+     * Render Name
+     *
+     * Creates the correct render name, from dynamic or static name and
+     * will replace . with _ to make it a valid Twig variable.
+     * @return string
+     */
+    public function render_name(): string {
+        $name = $this->has_dynamic_name()
+            ? $this->dynamic_name
+            : $this->name;
+
+        return str_replace( '.', '_', $name );
     }
 }

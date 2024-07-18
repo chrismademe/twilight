@@ -1,7 +1,12 @@
-{% set componentToRender = 'Logo' %}
+<Accordion>
+    <Accordion.Item>
+        <Accordion.Header>
+            <h2>Accordion Header</h2>
+        </Accordion.Header>
+        <Accordion.Body>
+            <p>Accordion Body</p>
+        </Accordion.Body>
+    </Accordion.Item>
+</Accordion>
 
-<Component
-    :is="shouldBeLogo ? 'Logo' : 'Input'"
-/>
-
-<Logo />
+<p>Some other content</p>
