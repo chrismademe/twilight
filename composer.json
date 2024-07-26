@@ -1,6 +1,6 @@
 {
 	"name": "chrismademe/twilight",
-	"version": "0.14.0",
+	"version": "0.15.0",
 	"description": "Experimental Twig compiler with support for custom Components",
 	"license": "MIT",
 	"autoload": {
