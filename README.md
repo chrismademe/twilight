@@ -28,19 +28,19 @@ This project is work in progress. Documentation will come later, below are a few
 
 ```twig
 {% set imageURL = '/images/example.png' %}
-<img @if="showImage" :src="imageURL" alt="Example" />
-<p @if="showRandomText" @text="Random text!" />
+<img @if="imageURL" :src="imageURL" alt="Example" />
+<p @unless="imageURL" @text="Image coming soon" />
 ```
 
 **Output**
 
 ```twig
-{% if showImage %}
+{% if imageURL %}
     <img src="/images/example.png" alt="Example">
 {% endif %}
 
-{% if showRandomText %}
-    <p>Random text!</p>
+{% if not imageURL %}
+    <p>Image coming soon</p>
 {% endif %}
 ```
 
