@@ -48,13 +48,13 @@ class HTMLElement implements NodeInterface {
 
         if ( $this->has_children() ) {
             foreach ( $this->get_children() as $child ) {
-                $markup .= sprintf( '%1$s%2$s%1$s', PHP_EOL, $child->render() );
+                $markup .= $child->render();
             }
         }
 
         $markup .= $this->has_dynamic_name()
-            ? sprintf( '</{{ %s }}>%s', $this->dynamic_name, PHP_EOL )
-            : sprintf( '</%s>%s', $this->name, PHP_EOL );
+            ? sprintf( '</{{ %s }}>', $this->dynamic_name )
+            : sprintf( '</%s>', $this->name );
 
         $markup .= $this->process_directives('after');
 

@@ -33,11 +33,11 @@ $tree = new NodeTree($tokenizer->tokenize(), [
 ]);
 $elements = $tree->create();
 
-printf( '<pre>%s</pre>', print_r($elements, true) );
+// printf( '<pre>%s</pre>', print_r($elements, true) );
 
 $compiler = new Compiler();
 $output = $compiler->compile($elements);
 
-printf( '<pre>%s</pre>', $output );
+echo $output;
 
 echo PHP_EOL . 'Execution time: ' . (number_format(microtime(true) - $timer, 4)) . ' seconds' . PHP_EOL;

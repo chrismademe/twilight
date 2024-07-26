@@ -48,7 +48,7 @@ class Component implements NodeInterface {
             foreach ( $this->get_children() as $child ) {
                 $markup .= sprintf( '%1$s%2$s%1$s', PHP_EOL, $child->render() );
             }
-            $markup .= '{% endset %}';
+            $markup .= '{% endset %}' . PHP_EOL;
         }
 
         $name = $this->has_dynamic_name()
