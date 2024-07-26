@@ -45,7 +45,7 @@ class AttributesDirective extends Directive {
 
     private function create_markup_for_html_element( HTMLElement $element, string $key, $attributes ): string {
         $markup = sprintf( '{%% set %s %%}', $key );
-        $markup .= sprintf( '{%% if %s is iterable %%}', $key );
+        $markup .= sprintf( '{%% if %s is iterable %%}', $attributes );
         $markup .= sprintf( '{%% for name, value in %s %%}', $attributes );
         $markup .= '{{ name }}="{{ value }}" ';
         $markup .= '{% endfor %}';
