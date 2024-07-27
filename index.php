@@ -1,9 +1,6 @@
 <?php
 
-use Twilight\Renderer;
 use Twilight\Directives;
-use Twilight\Tokenizer;
-use Twilight\NodeTree;
 use Twilight\Compiler\Compiler;
 use Twilight\Directives\IfDirective;
 use Twilight\Directives\ForDirective;
@@ -29,7 +26,8 @@ $compiler = new Compiler([
     'input' => __DIR__ . '/demo/src',
     'output' => __DIR__ . '/demo/dist',
     'directives' => $directives,
-    'ignore' => ['InnerBlocks']
+    'ignore' => ['InnerBlocks'],
+    'hoist' => ['Style', 'Script']
 ]);
 
 $result = $compiler->compile();

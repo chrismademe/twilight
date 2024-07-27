@@ -17,9 +17,12 @@ class NodeTree {
     private array $tree = [];
     private array $stack = [];
     private array $self_closing_elements = [];
+    private array $hoist = [];
+    private array $hoisted_elements = [];
 
     public function __construct( private array $tokens, private array $options ) {
         $this->directives = $options['directives'] ?? new Directives;
+        $this->hoist = $options['hoist'] ?? [];
         $this->self_closing_elements = [
             'area',
             'base',
@@ -71,6 +74,7 @@ class NodeTree {
         $pieces = [];
 
         foreach ( $elements as $element ) {
+
 
             /**
              * The "Children" component is a special component that is used to render
@@ -156,6 +160,18 @@ class NodeTree {
                 if ( isset( $element['children'] ) ) {
                     $children = $this->parse_slots($element, $component);
                     $component->set_children($this->convert($children));
+                }
+
+                /**
+                 * Hoisted components are pulled out of the tree and returned to the implementor
+                 * in an array, these are ideal for things like styles and scripts that need to
+                 * be included in the head of the document
+                 *
+                 * These components are not rendered in the tree
+                 */
+                if ( in_array( $element['name'], $this->hoist ) ) {
+                    $this->hoisted_elements[] = $component;
+                    continue;
                 }
 
                 $pieces[] = $component;
@@ -285,6 +301,15 @@ class NodeTree {
         $children = array_filter($element['children'], fn($child) => $child['type'] !== 'slot');
 
         return $children;
+    }
+
+    /**
+     * Get Hoisted Elements
+     *
+     * @return array
+     */
+    public function get_hoisted_elements() {
+        return $this->hoisted_elements;
     }
 
 }

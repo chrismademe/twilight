@@ -64,10 +64,16 @@ class Compiler {
         $tokenizer = new Tokenizer( $input );
         $tree = new NodeTree( $tokenizer->tokenize(), [
             'directives' => $this->options['directives'],
-            'ignore' => $this->options['ignore']
+            'ignore' => $this->options['ignore'],
+            'hoist' => $this->options['hoist'] ?? []
         ] );
 
-        return $renderer->render( $tree->create() );
+        $elements = $tree->create();
+
+        $hoisted = $tree->get_hoisted_elements();
+        print_r($hoisted);
+
+        return $renderer->render( $elements );
     }
 
     /**
