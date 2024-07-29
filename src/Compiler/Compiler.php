@@ -71,7 +71,7 @@ class Compiler {
 
         $elements = $tree->create();
 
-        $this->hoisted = $tree->get_hoisted_elements();
+        $this->hoisted[ $file ][] = $tree->get_hoisted_elements();
 
         return $renderer->render( $elements );
     }
