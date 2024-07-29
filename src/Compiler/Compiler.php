@@ -10,6 +10,7 @@ use Twilight\Tokenizer;
 
 class Compiler {
 
+    private array $hoisted = [];
     private $timer;
 
     public function __construct( private array $options = [] ) {
@@ -70,7 +71,7 @@ class Compiler {
 
         $elements = $tree->create();
 
-        $hoisted = $tree->get_hoisted_elements();
+        $this->hoisted = $tree->get_hoisted_elements();
 
         return $renderer->render( $elements );
     }
@@ -140,6 +141,15 @@ class Compiler {
                 unlink( $file->getPathname() );
             }
         }
+    }
+
+    /**
+     * Get Hoisted Elements
+     *
+     * @return array
+     */
+    public function get_hoisted_elements(): array {
+        return $this->hoisted;
     }
 
 }

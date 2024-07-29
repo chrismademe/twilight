@@ -32,4 +32,6 @@ $compiler = new Compiler([
 
 $result = $compiler->compile();
 
+print_r($compiler->get_hoisted_elements());
+
 print_r($result);
