@@ -2,6 +2,8 @@
 
 namespace Twilight\Compiler;
 
+use League\Flysystem\Local\LocalFilesystemAdapter;
+use League\Flysystem\Filesystem;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Twilight\NodeTree;
@@ -11,10 +13,16 @@ use Twilight\Tokenizer;
 class Compiler {
 
     private array $hoisted = [];
+    private Filesystem $input;
+    private Filesystem $output;
     private $timer;
 
     public function __construct( private array $options = [] ) {
         $this->timer = microtime(true);
+
+        // Setup Filesystem
+        $this->input = new Filesystem( new LocalFilesystemAdapter( $this->options['input'] ) );
+        $this->output = new Filesystem( new LocalFilesystemAdapter( $this->options['output'] ) );
     }
 
     /**
@@ -59,7 +67,7 @@ class Compiler {
      * @return string
      */
     private function compile_file( string $file ): string {
-        $input = file_get_contents( $this->options['input'] . '/' . $file );
+        $input = $this->input->read( $file );
 
         $renderer = new Renderer();
         $tokenizer = new Tokenizer( $input );
@@ -84,11 +92,11 @@ class Compiler {
      * @param string $file
      */
     private function write_file( string $file, string $output ) {
-        $output_directory = $this->options['output'] . '/' . dirname( $file );
-        if ( ! is_dir( $output_directory ) ) {
-            mkdir( $output_directory, 0755, true );
+        $output_directory = dirname( $file );
+        if ( ! $this->output->directoryExists( $output_directory ) ) {
+            $this->output->createDirectory( $output_directory );
         }
-        file_put_contents( $this->options['output'] . '/' . $file, $output );
+        $this->output->write( $file, $output );
     }
 
     /**
@@ -100,12 +108,14 @@ class Compiler {
      */
     private function get_views(): array {
         $views = [];
-        $directory = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $this->options['input'] ) );
-        foreach ( $directory as $file ) {
-            if ( $file->isFile() && $file->getExtension() === 'twig' ) {
-                $views[] = $file->getPathname();
+        $contents = $this->input->listContents('', true);
+
+        foreach ( $contents as $item ) {
+            if ( $item->isFile() && pathinfo( $item->path(), PATHINFO_EXTENSION ) === 'twig' ) {
+                $views[] = $item->path();
             }
         }
+
         return $views;
     }
 
@@ -130,15 +140,19 @@ class Compiler {
      * @return void
      */
     public function clear_dist() {
-        $directory = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator( $this->options['output'], RecursiveDirectoryIterator::SKIP_DOTS ),
-            RecursiveIteratorIterator::CHILD_FIRST
-        );
-        foreach ( $directory as $file ) {
-            if ( $file->isDir() ) {
-                rmdir( $file->getPathname() );
+        $contents = $this->output->listContents('', true)
+            ->sortByPath()
+            ->toArray();
+
+        foreach ( $contents as $item ) {
+            if ( $item->isDir() ) {
+                if ( $this->output->directoryExists( $item->path() ) ) {
+                    $this->output->deleteDirectory( $item->path() );
+                }
             } else {
-                unlink( $file->getPathname() );
+                if ( $this->output->fileExists( $item->path() ) ) {
+                    $this->output->delete( $item->path() );
+                }
             }
         }
     }
