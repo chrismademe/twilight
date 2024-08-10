@@ -51,8 +51,8 @@ class NodeTree {
         $this->current = &$this->tree;
         $this->stack = []; // Stack to keep track of parent nodes
 
-        foreach ($this->tokens as $key => $token) {
-            match($token['type']) {
+        foreach ( $this->tokens as $key => $token ) {
+            match( $token['type'] ) {
                 'tag', 'component', 'slot' => $this->create_opening_tag($token),
                 'self-closing-tag', 'self-closing-component', 'self-closing-slot' => $this->create_self_closing_tag($token),
                 'text' => $this->create_text_node($token),
@@ -75,14 +75,16 @@ class NodeTree {
 
         foreach ( $elements as $element ) {
 
-
             /**
              * The "Children" component is a special component that is used to render
              * the children of a component. It is used internally by the framework
              *
              * We will replace it directly here with a Text node.
              */
-            if ( in_array( $element['type'], ['self-closing-component', 'component'] ) && $element['name'] === 'Children' ) {
+            if (
+                in_array( $element['type'], ['self-closing-component', 'component'] )
+                && $element['name'] === 'Children'
+            ) {
                 $pieces[] = new Text('{{ children | raw }}');
                 continue;
             }
@@ -93,7 +95,10 @@ class NodeTree {
              * for this to work, we'll need to process attributes before anything else
              * so that conditionals and such can be used in the attributes
              */
-            if ( isset($element['name']) && ( $element['name'] === 'Component' || $element['name'] === 'Element' ) ) {
+            if (
+                isset($element['name'])
+                && ( $element['name'] === 'Component' || $element['name'] === 'Element' )
+            ) {
                 $is_self_closing = $element['type'] === 'self-closing-component';
                 $is_dynamic = isset( $element['attributes'][':is'] );
                 $is = $element['attributes'][':is'] ?? $element['attributes']['is'];
@@ -131,7 +136,10 @@ class NodeTree {
             }
 
             if ( $element['type'] === 'tag' || $element['type'] === 'self-closing-tag' ) {
-                $html_element = new HTMLElement($element['name'], in_array($element['name'], $this->self_closing_elements));
+                $html_element = new HTMLElement(
+                    $element['name'],
+                    in_array($element['name'], $this->self_closing_elements)
+                );
                 $html_element->set_attributes($element['attributes']);
                 $html_element->set_directives($this->directives);
 
@@ -274,7 +282,7 @@ class NodeTree {
      * TODO Add a check in case we encounter an unexpected closing tag
      */
     private function handle_closing_tag( array $token ) {
-        if (!empty($this->stack)) {
+        if ( ! empty($this->stack) ) {
             $this->current = &$this->stack[count($this->stack) - 1];
             array_pop($this->stack);
         }

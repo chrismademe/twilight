@@ -17,8 +17,8 @@ class Tokenizer {
      * Tokenize the input HTML into an array of tokens
      */
     public function tokenize() {
-        while ($this->position < $this->length) {
-            if ($this->match_token()) {
+        while ( $this->position < $this->length ) {
+            if ( $this->match_token() ) {
                 continue;
             }
             // Move to the next character to avoid infinite loops
@@ -43,9 +43,9 @@ class Tokenizer {
             'text' => '/^([^<]+)/s'
         ];
 
-        foreach ($patterns as $type => $pattern) {
-            if (preg_match($pattern, substr($this->input, $this->position), $matches)) {
-                switch ($type) {
+        foreach ( $patterns as $type => $pattern ) {
+            if ( preg_match($pattern, substr($this->input, $this->position), $matches) ) {
+                switch ( $type ) {
                     case 'self-closing-component':
                     case 'self-closing-tag':
                         $token = [
@@ -81,20 +81,20 @@ class Tokenizer {
                         break;
                     case 'doctype':
                     case 'text':
-                        if (trim($matches[0]) !== '') {
+                        if ( trim($matches[0]) !== '' ) {
                             $token = [
                                 'type' => 'text',
                                 'value' => $matches[0]
                             ];
                         } else {
                             // Skip over whitespace text
-                            $this->position += strlen($matches[0]);
+                            $this->position += strlen( $matches[0] );
                             return true;
                         }
                         break;
                 }
                 $this->tokens[] = $token;
-                $this->position += strlen($matches[0]);
+                $this->position += strlen( $matches[0] );
                 return true;
             }
         }
@@ -110,10 +110,15 @@ class Tokenizer {
     private function parse_attributes( string $string ) {
         $attributes = [];
 
-        if (!empty($string)) {
-            preg_match_all('/\s*([a-zA-Z0-9-_:.@]+)(\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|\{([^}]*)\}|([^\s>]+)))?/', $string, $matches, PREG_SET_ORDER);
+        if ( ! empty( $string ) ) {
+            preg_match_all(
+                '/\s*([a-zA-Z0-9-_:.@]+)(\s*=\s*(?:"([^"]*)"|\'([^\']*)\'|\{([^}]*)\}|([^\s>]+)))?/',
+                $string,
+                $matches,
+                PREG_SET_ORDER
+            );
 
-            foreach ($matches as $attr) {
+            foreach ( $matches as $attr ) {
 
                 // Check for double quoted, single quoted, curly brace or unquoted attribute values
                 $value = $attr[3] ?? $attr[4] ?? $attr[5] ?? $attr[6] ?? true;
@@ -121,7 +126,7 @@ class Tokenizer {
                 // If the attribute value is null, remove it
                 if ($value === "null") continue;
 
-                $attributes[$attr[1]] = $value;
+                $attributes[ $attr[1] ] = $value;
             }
         }
 
