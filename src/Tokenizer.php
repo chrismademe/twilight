@@ -7,6 +7,7 @@ class Tokenizer {
     private $tokens = [];
     private $position = 0;
     private $length;
+    private $is_inside_raw_content = false;
 
     public function __construct( private string $input, private array $options = [] ) {
         $this->input = trim($input);
@@ -40,7 +41,9 @@ class Tokenizer {
             'end-tag' => '/^<\/([a-zA-Z0-9.-]+)>/s',
             'html-comment' => '/^<!--(.*?)-->/s',
             'twig-comment' => '/^{#(.*?)(#})/s',
-            'text' => '/^([^<]+)/s'
+            'text' => $this->is_inside_raw_content
+                ? '/^(.*?)(?=<\/script>|<\/style>)/is'
+                : '/^([^<]+)/s'
         ];
 
         foreach ( $patterns as $type => $pattern ) {
@@ -64,6 +67,11 @@ class Tokenizer {
                             'value' => $matches[0],
                             'attributes' => isset($matches[2]) ? $this->parse_attributes($matches[2]) : null
                         ];
+
+                        if ( $matches[1] === 'Script' || $matches[1] === 'Style' ) {
+                            $this->is_inside_raw_content = true;
+                        }
+
                         break;
                     case 'end-tag':
                         $token = [
@@ -71,6 +79,11 @@ class Tokenizer {
                             'value' => $matches[0],
                             'name' => $matches[1]
                         ];
+
+                        if ( $matches[1] === 'Script' || $matches[1] === 'Style' ) {
+                            $this->is_inside_raw_content = false;
+                        }
+
                         break;
                     case 'html-comment':
                     case 'twig-comment':

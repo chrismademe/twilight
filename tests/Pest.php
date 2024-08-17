@@ -1,6 +1,6 @@
 <?php
 
-use Twilight\Compiler;
+use Twilight\Renderer;
 use Twilight\Directives;
 use Twilight\Tokenizer;
 use Twilight\NodeTree;
@@ -9,6 +9,7 @@ use Twilight\Directives\ForDirective;
 use Twilight\Directives\HtmlDirective;
 use Twilight\Directives\TextDirective;
 use Twilight\Directives\AttributesDirective;
+use Twilight\Directives\UnlessDirective;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,7 @@ function compile( string $input ): string
 {
     $directives = new Directives;
     $directives->register('if', IfDirective::class);
+    $directives->register('unless', UnlessDirective::class);
     $directives->register('attributes', AttributesDirective::class);
     $directives->register('for', ForDirective::class);
     $directives->register('html', HtmlDirective::class);
@@ -64,6 +66,6 @@ function compile( string $input ): string
         'directives' => $directives
     ]);
     $elements = $tree->create();
-    $compiler = new Compiler();
-    return $compiler->compile($elements);
+    $renderer = new Renderer();
+    return $renderer->render($elements);
 }
