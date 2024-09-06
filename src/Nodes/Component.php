@@ -56,22 +56,22 @@ class Component implements NodeInterface {
             : sprintf( '"%s"', $this->render_name );
 
         $markup .= sprintf( '{{ render_component(%s', $name );
+        $attributes = []; // Keep track of rendered attributes
 
         if ( $this->has_attributes() ) {
-            $attributes = [];
-            $markup .= ', { ';
             foreach ( $this->attributes as $attribute ) {
                 if ( $this->is_directive($attribute->name) ) continue; // Skip directives
                 $attributes[] = $attribute->render();
             }
+            $markup .= empty($attributes) ? '' : ', { ';
             $markup .= implode(', ', $attributes);
         }
 
-        if ( ! $this->has_attributes() && ( $this->has_slots() || $this->has_children() ) ) {
+        if ( empty($attributes) && ( $this->has_slots() || $this->has_children() ) ) {
             $markup .= ', { ';
         }
 
-        if ( $this->has_attributes() && ( $this->has_slots() || $this->has_children() ) ) {
+        if ( ! empty($attributes) && ( $this->has_slots() || $this->has_children() ) ) {
             $markup .= ', ';
         }
 
@@ -87,7 +87,7 @@ class Component implements NodeInterface {
             $markup .= implode(', ', $props);
         }
 
-        if ( $this->has_attributes() || $this->has_children() || $this->has_slots() ) {
+        if ( ! empty($attributes) || $this->has_children() || $this->has_slots() ) {
             $markup .= ' }';
         }
 
