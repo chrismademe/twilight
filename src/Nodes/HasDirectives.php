@@ -24,7 +24,16 @@ trait HasDirectives {
         if ( $this->directives->is_empty() ) return '';
 
         $markup = '';
-        foreach ( $this->directives->all() as $name => $directive ) {
+
+        /**
+         * During the after method, reverse the order so end tags are placed
+         * in the correct order.
+         */
+        $directives = $method === 'after'
+            ? array_reverse( $this->directives->all() )
+            : $this->directives->all();
+
+        foreach ( $directives as $name => $directive ) {
             if ( ! $directive->should_run($this) ) continue;
             if ( ! method_exists($directive, $method) ) continue;
             $markup .= $directive->$method($this);
