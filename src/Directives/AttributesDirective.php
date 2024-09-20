@@ -27,7 +27,7 @@ class AttributesDirective extends Directive {
      * @param Component|HTMLElement $element
      */
     public function before( Component|HTMLElement $element ) {
-        $key = sprintf( '%s_%s_attributes', str_replace( '-', '_', $element->name ), $element->ref );
+        $key = sprintf( '%s_attributes', str_replace( '-', '_', $element->name ) );
 
         $attributes = $element->get_attribute('@attributes')->value === true
             ? 'attributes'

@@ -5,18 +5,10 @@ namespace Twilight\Nodes;
 class HTMLElement implements NodeInterface {
     use CanBeSelfClosing, CanHaveDynamicName, HasHTMLAttributes, HasChildren, HasDirectives;
 
-    public string $ref;
-
     public function __construct(
         public string $name,
         public bool $is_self_closing = false,
-    ) {
-        /**
-         * Generate a unique reference for this element instance.
-         * We use this when creating the Twig markup for child elements.
-         */
-        $this->ref = bin2hex( random_bytes(5) );
-    }
+    ) {}
 
     /**
      * Render the HTML element to Twig markup.

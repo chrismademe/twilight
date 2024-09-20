@@ -5,15 +5,7 @@ namespace Twilight\Nodes;
 class Component implements NodeInterface {
     use CanHaveDynamicName, HasComponentAttributes, HasChildren, HasDirectives, HasSlots;
 
-    public string $ref;
-
-    public function __construct( public string $name ) {
-        /**
-         * Generate a unique reference for this component instance.
-         * We use this when creating the Twig markup for child elements.
-         */
-        $this->ref = bin2hex( random_bytes(5) );
-    }
+    public function __construct( public string $name ) {}
 
     /**
      * Render the component to Twig markup.
@@ -27,7 +19,7 @@ class Component implements NodeInterface {
 
         if ( $this->has_slots() ) {
             foreach ( $this->get_slots() as $slot ) {
-                $markup .= sprintf( '{%% set %s_%s_slot_%s %%}', $this->render_name, $this->ref, $slot->name );
+                $markup .= sprintf( '{%% set %s_slot_%s %%}', $this->render_name, $slot->name );
                 foreach ( $slot->value as $child ) {
                     $markup .= sprintf( '%1$s%2$s%1$s', PHP_EOL, $child->render() );
                 }
@@ -35,16 +27,16 @@ class Component implements NodeInterface {
             }
 
             $slot_variables = array_map( function($slot) {
-                return sprintf( '"%s": %s_%s_slot_%s', $slot->name, $this->render_name, $this->ref, $slot->name );
+                return sprintf( '"%s": %s_slot_%s', $slot->name, $this->render_name, $slot->name );
             }, $this->get_slots() );
 
-            $markup .= sprintf( '{%% set %s_%s_slots = { ', $this->render_name, $this->ref );
+            $markup .= sprintf( '{%% set %s_slots = { ', $this->render_name );
             $markup .= implode(', ', $slot_variables);
             $markup .= ' } %}';
         }
 
         if ( $this->has_children() ) {
-            $markup .= sprintf( '{%% set %s_%s_children %%}', $this->render_name, $this->ref );
+            $markup .= sprintf( '{%% set %s_children %%}', $this->render_name );
             foreach ( $this->get_children() as $child ) {
                 $markup .= sprintf( '%1$s%2$s%1$s', PHP_EOL, $child->render() );
             }
@@ -76,11 +68,11 @@ class Component implements NodeInterface {
         }
 
         if ( $this->has_slots() ) {
-            $props['slots'] = sprintf( '"slots": %s_%s_slots', $this->render_name, $this->ref );
+            $props['slots'] = sprintf( '"slots": %s_slots', $this->render_name );
         }
 
         if ( $this->has_children() ) {
-            $props['children'] = sprintf( '"children": %s_%s_children', $this->render_name, $this->ref );
+            $props['children'] = sprintf( '"children": %s_children', $this->render_name );
         }
 
         if ( isset($props) ) {

@@ -47,3 +47,11 @@ test('dynamic html correctly closes', function () {
 
     expect($compiled_input)->toEqual($output);
 });
+
+test('directives render in the correct order', function () {
+    $input = file_get_contents(__DIR__ . '/input/html/07-directives-render-in-the-correct-order.twig');
+    $output = file_get_contents(__DIR__ . '/output/html/07-directives-render-in-the-correct-order.twig');
+    $compiled_input = compile($input);
+
+    expect($compiled_input)->toEqual($output);
+});
