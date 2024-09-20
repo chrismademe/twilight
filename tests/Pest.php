@@ -50,8 +50,7 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function compile( string $input ): string
-{
+function compile( string $input ): string {
     $directives = new Directives;
     $directives->register('if', IfDirective::class);
     $directives->register('unless', UnlessDirective::class);
@@ -68,4 +67,17 @@ function compile( string $input ): string
     $elements = $tree->create();
     $renderer = new Renderer();
     return $renderer->render($elements);
+}
+
+function get_tests( string $path ) {
+    $tests = [];
+    $directories = glob( $path, GLOB_ONLYDIR );
+    foreach ($directories as $dir) {
+        $tests[] = [
+            'name' => str_replace(__DIR__ . '/Unit/', '', $dir),
+            'input' => file_get_contents($dir . '/input.twig'),
+            'output' => file_get_contents($dir . '/output.twig')
+        ];
+    }
+    return $tests;
 }
