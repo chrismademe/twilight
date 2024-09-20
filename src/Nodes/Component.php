@@ -86,6 +86,7 @@ class Component implements NodeInterface {
         $markup .= ') }}';
 
         $markup .= $this->process_directives('after');
+        $markup .= $this->process_directives('cleanup');
 
         return $markup;
     }

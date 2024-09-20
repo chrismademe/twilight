@@ -49,6 +49,7 @@ class HTMLElement implements NodeInterface {
             : sprintf( '</%s>', $this->name );
 
         $markup .= $this->process_directives('after');
+        $markup .= $this->process_directives('cleanup');
 
         return $markup;
     }

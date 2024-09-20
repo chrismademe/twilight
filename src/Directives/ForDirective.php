@@ -18,7 +18,7 @@ class ForDirective extends Directive {
      * @return bool
      */
     public function should_run( Component|HTMLElement $element ): bool {
-        return $element->has_attribute('@for');
+        return $element->has_attribute('@for') || $element->has_attribute('@each');
     }
 
     /**
@@ -27,7 +27,9 @@ class ForDirective extends Directive {
      * @param Component|HTMLElement $element
      */
     public function before( Component|HTMLElement $element ): string {
-        $condition = $element->get_attribute('@for');
+        $condition = $element->has_attribute('@for')
+            ? $element->get_attribute('@for')
+            : $element->get_attribute('@each');
         return sprintf( '{%% for %s %%}', $condition->value );
     }
 

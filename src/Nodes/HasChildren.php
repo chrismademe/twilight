@@ -6,7 +6,7 @@ trait HasChildren {
 
     public array $children;
 
-    public function set_children(array $children): void {
+    public function set_children( array $children ): void {
         $this->children = $children;
     }
 
