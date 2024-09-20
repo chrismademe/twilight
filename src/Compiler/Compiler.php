@@ -6,23 +6,80 @@ use League\Flysystem\Local\LocalFilesystemAdapter;
 use League\Flysystem\Filesystem;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Twilight\Directives;
 use Twilight\NodeTree;
 use Twilight\Renderer;
 use Twilight\Tokenizer;
 
 class Compiler {
 
+    private array $options = [];
     private array $hoisted = [];
     private Filesystem $input;
     private Filesystem $output;
     private $timer;
 
-    public function __construct( private array $options = [] ) {
+    public function __construct() {
         $this->timer = microtime(true);
+    }
 
-        // Setup Filesystem
-        $this->input = new Filesystem( new LocalFilesystemAdapter( $this->options['input'] ) );
-        $this->output = new Filesystem( new LocalFilesystemAdapter( $this->options['output'] ) );
+    /**
+     * From
+     *
+     * Set the input directory.
+     * @param string $path
+     * @return Compiler
+     */
+    public function from( string $path ): Compiler {
+        $this->options['input'] = $path;
+        $this->input = new Filesystem( new LocalFilesystemAdapter( $path ) );
+        return $this;
+    }
+
+    /**
+     * To
+     *
+     * Set the output directory.
+     * @param string $path
+     * @return Compiler
+     */
+    public function to( string $path ): Compiler {
+        $this->options['output'] = $path;
+        $this->output = new Filesystem( new LocalFilesystemAdapter( $path ) );
+        return $this;
+    }
+
+    /**
+     * Hoist
+     *
+     * Hoist elements to the top of the file.
+     * @param array $elements
+     * @return Compiler
+     */
+    public function hoist( array $elements ): Compiler {
+        $this->options['hoist'] = $elements;
+        return $this;
+    }
+
+    /**
+     * Directives
+     */
+    public function directives( Directives $directives ): Compiler {
+        $this->options['directives'] = $directives;
+        return $this;
+    }
+
+    /**
+     * Ignore
+     *
+     * Elements not to compile
+     *
+     * @param array $elements
+     * @return Compiler
+     */
+    public function ignore( array $elements ): Compiler {
+        $this->options['ignore'] = $elements;
+        return $this;
     }
 
     /**

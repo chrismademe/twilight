@@ -15,23 +15,22 @@ ini_set('display_errors', 1);
 require_once __DIR__ . '/vendor/autoload.php';
 
 $directives = new Directives;
-$directives->register('if', IfDirective::class);
-$directives->register('unless', UnlessDirective::class);
-$directives->register('attributes', AttributesDirective::class);
-$directives->register('for', ForDirective::class);
-$directives->register('html', HtmlDirective::class);
-$directives->register('text', TextDirective::class);
+$directives->register( 'if', IfDirective::class );
+$directives->register( 'unless', UnlessDirective::class );
+$directives->register( 'attributes', AttributesDirective::class );
+$directives->register( 'for', ForDirective::class );
+$directives->register( 'html', HtmlDirective::class );
+$directives->register( 'text', TextDirective::class );
 
-$compiler = new Compiler([
-    'input' => __DIR__ . '/demo/src',
-    'output' => __DIR__ . '/demo/dist',
-    'directives' => $directives,
-    'ignore' => ['InnerBlocks'],
-    'hoist' => ['Style', 'Script']
-]);
+$compile = new Compiler;
+$result = $compile
+    ->from( __DIR__ . '/demo/src' )
+    ->to( __DIR__ . '/demo/dist' )
+    ->hoist( ['Style', 'Script'] )
+    ->ignore( ['InnerBlocks'] )
+    ->directives( $directives )
+    ->compile();
 
-$result = $compiler->compile();
+print_r( $compile->get_hoisted_elements() );
 
-print_r($compiler->get_hoisted_elements());
-
-print_r($result);
+print_r( $result );
