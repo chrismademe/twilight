@@ -30,6 +30,8 @@ class HTMLElement implements NodeInterface {
             }
         }
 
+        $markup .= $this->process_directives('tag');
+
         $markup .= $this->is_self_closing ? ' />' : '>';
 
         // Self closing elements cannot have children, so we're done

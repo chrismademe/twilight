@@ -27,6 +27,13 @@ abstract class Directive {
     public function before( Component|HTMLElement $element ) {}
 
     /**
+     * Modify the markup of the element tag
+     *
+     * @param Component|HTMLElement $element
+     */
+    public function tag( Component|HTMLElement $element ) {}
+
+    /**
      * Modify the markup after the element
      *
      * @param Component|HTMLElement $element

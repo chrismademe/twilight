@@ -14,6 +14,7 @@ class Component implements NodeInterface {
         $markup = '';
 
         $markup .= $this->process_directives('before');
+        $markup .= $this->process_directives('tag');
 
         $this->render_name = $this->render_name();
 
