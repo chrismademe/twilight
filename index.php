@@ -2,12 +2,14 @@
 
 use Twilight\Directives;
 use Twilight\Compiler\Compiler;
-use Twilight\Directives\IfDirective;
+use Twilight\Directives\AttributesDirective;
+use Twilight\Directives\CheckedDirective;
 use Twilight\Directives\ForDirective;
 use Twilight\Directives\HtmlDirective;
+use Twilight\Directives\IfDirective;
+use Twilight\Directives\SelectedDirective;
 use Twilight\Directives\TextDirective;
 use Twilight\Directives\UnlessDirective;
-use Twilight\Directives\AttributesDirective;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -21,6 +23,8 @@ $directives->register( 'attributes', AttributesDirective::class );
 $directives->register( 'for', ForDirective::class );
 $directives->register( 'html', HtmlDirective::class );
 $directives->register( 'text', TextDirective::class );
+$directives->register( 'checked', CheckedDirective::class );
+$directives->register( 'selected', SelectedDirective::class );
 
 $compile = new Compiler;
 $result = $compile

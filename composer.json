@@ -1,7 +1,7 @@
 {
 	"name": "chrismademe/twilight",
-	"version": "0.23.0",
-	"description": "Pre-Processor for Twig with syntax features and components",
+	"version": "0.24.0",
+	"description": "Twig Preprocessor with an elegant syntax and component API",
 	"license": "MIT",
 	"autoload": {
 		"psr-4": {

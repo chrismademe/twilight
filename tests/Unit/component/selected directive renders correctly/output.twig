@@ -1,0 +1,4 @@
+{% set Option_children %}
+United States
+{% endset %}
+{{ render_component("Option", { "value": "US", "selected": user.country == 'US', "children": Option_children }) }}
