@@ -1,12 +1,15 @@
 {
 	"name": "chrismademe/twilight",
-	"version": "0.24.0",
+	"version": "0.25.0",
 	"description": "Twig Preprocessor with an elegant syntax and component API",
 	"license": "MIT",
 	"autoload": {
 		"psr-4": {
 			"Twilight\\": "src/"
-		}
+		},
+		"files": [
+			"functions/twilight.php"
+		]
 	},
 	"authors": [
 		{
@@ -26,6 +29,7 @@
 		"test": "./vendor/bin/pest --fail-on-warning"
 	},
 	"require": {
-		"league/flysystem": "^3.28"
+		"league/flysystem": "^3.28",
+		"twig/twig": "^3.14"
 	}
 }
