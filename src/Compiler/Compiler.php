@@ -137,8 +137,40 @@ class Compiler {
         $elements = $tree->create();
 
         $this->hoisted[ $file ] = $tree->get_hoisted_elements();
+        $this->compile_assets( $file, $tree->get_hoisted_elements() );
 
         return $renderer->render( $elements );
+    }
+
+    /**
+     * Compile Assets
+     *
+     * Compiles the content is Script and Style elements into their
+     * respective files.
+     *
+     * @param string $parent_file
+     * @param array $hoisted_elements
+     */
+    private function compile_assets( string $parent_file, array $hoisted_elements ) {
+        $filename_without_extension = rtrim( $parent_file, '.twig' );
+
+        /**
+         * Remove the '/template' suffix from the filename if it exists.
+         * Components usually have this.
+         */
+        if ( str_ends_with( $filename_without_extension, '/template' ) ) {
+            $filename_without_extension = rtrim( $filename_without_extension, '/template' );
+        }
+
+        foreach ( $hoisted_elements as $element ) {
+            if ( $element->name === 'Script' ) {
+                $this->write_file( 'assets/' . $filename_without_extension . '/script.js', $element->children[0]->value );
+            }
+
+            if ( $element->name === 'Style' ) {
+                $this->write_file( 'assets/' . $filename_without_extension . '/style.css', $element->children[0]->value );
+            }
+        }
     }
 
     /**

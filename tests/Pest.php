@@ -11,6 +11,7 @@ use Twilight\Directives\TextDirective;
 use Twilight\Directives\AttributesDirective;
 use Twilight\Directives\UnlessDirective;
 use Twilight\Directives\CheckedDirective;
+use Twilight\Directives\DisabledDirective;
 use Twilight\Directives\SelectedDirective;
 
 /*
@@ -61,6 +62,7 @@ function compile( string $input ): string {
     $directives->register('html', HtmlDirective::class);
     $directives->register('text', TextDirective::class);
     $directives->register('checked', CheckedDirective::class);
+    $directives->register('disabled', DisabledDirective::class);
     $directives->register('selected', SelectedDirective::class);
 
     $tokenizer = new Tokenizer($input);
