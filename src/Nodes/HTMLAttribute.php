@@ -19,6 +19,10 @@ class HTMLAttribute {
             ? sprintf( '="{{ %s }}"', $this->value )
             : sprintf( '="%s"', $this->value );
 
+        $condition_value = $this->is_dynamic()
+            ? $this->value
+            : sprintf( "'%s'", $this->value );
+
         if ( is_null($this->value) || $this->value === true ) {
             $rendered_value = '';
         }
@@ -27,7 +31,7 @@ class HTMLAttribute {
             return '';
         }
 
-        return sprintf( '%s%s', $rendered_name, $rendered_value );
+        return sprintf( '{%% if %s is not null %%}%s%s{%% endif %%}', $condition_value, $rendered_name, $rendered_value );
     }
 
     public function is_dynamic(): bool {
