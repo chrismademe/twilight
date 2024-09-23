@@ -16,7 +16,7 @@ $result = compile(
     output: __DIR__ . '/demo/dist'
 );
 
-print_r( render(
+echo render(
     template: 'form.twig',
     context: []
-) );
+);
