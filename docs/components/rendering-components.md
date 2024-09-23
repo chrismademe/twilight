@@ -27,14 +27,6 @@ Twig::option( 'render_component_callback', 'theme_render_component' );
  * @return string
  */
 function theme_render_component( string $name, string $path, mixed $context, Twig $twig ) {
-
-    /**
-     * Apply some filters to the context
-     */
-    $context = apply_filters( 'component', $context );
-    $context = apply_filters( sprintf( 'component.%s', $name ), $context );
-
     return $twig->render( sprintf( 'components/%s/template.twig', $path ), $context );
-
 };
 ```
