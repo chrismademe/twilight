@@ -22,7 +22,7 @@ class Twig {
 	public function __construct() {
 
 		$this->loader = new FilesystemLoader( self::$options['paths'] );
-		$this->instance = new Environment( $this->loader, self::$options );
+		$this->instance = new Environment( $this->loader, self::$options['twig'] ?? [] );
 
 		$this->instance->addFunction(
 			new TwigFunction(
@@ -32,6 +32,17 @@ class Twig {
 			)
 		);
 
+	}
+
+	/**
+	 * Instance
+	 *
+	 * Returns the Twig instance.
+	 *
+	 * @return Environment
+	 */
+	public function instance() {
+		return $this->instance;
 	}
 
 	/**
