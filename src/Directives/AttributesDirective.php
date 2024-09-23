@@ -47,14 +47,14 @@ class AttributesDirective extends Directive {
         $markup = sprintf( '{%% set %s %%}', $key );
         $markup .= sprintf( '{%% if %s is iterable %%}', $attributes );
         $markup .= sprintf( '{%% for name, value in %s %%}', $attributes );
-        $markup .= '{{ name }}="{{ value }}" ';
+        $markup .= '{% if value is not null %}{{ name }}="{{ value }}"{% endif %} ';
         $markup .= '{% endfor %}';
         $markup .= '{% else %}';
         $markup .= sprintf( '{{ %s | raw }}', $attributes );
         $markup .= '{% endif %}';
         $markup .= sprintf( '{%% endset %%}%s', PHP_EOL );
 
-        $element->set_attribute(sprintf( '{{ %s | raw }}', $key ), null);
+        $element->set_attribute( sprintf( '{{ %s | raw }}', $key ), null );
 
         return $markup;
     }
