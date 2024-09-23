@@ -5,6 +5,9 @@ namespace Twilight\Twig;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
+use Twig\TwigFilter;
+use Twilight\Events;
+use function Twilight\classnames;
 
 class Twig {
 
@@ -29,6 +32,13 @@ class Twig {
 				'render_component',
 				[ $this, 'render_component' ],
 				[ 'is_safe' => [ 'html' ] ]
+			)
+		);
+
+		$this->instance->addFilter(
+			new TwigFilter(
+				'cls',
+				'\\Twilight\\classnames'
 			)
 		);
 
@@ -65,6 +75,11 @@ class Twig {
 	 */
 	public function render_component( string $name, array|null $context = [] ) {
 		$path = str_replace( ['_', '.'], '/', $name );
+
+		/**
+		 * Filter the context before rendering the component.
+		 */
+		$context = Events::filter( $name . ':render', $context );
 
 		/**
 		 * If a custom callback is set, use it to render the component.
