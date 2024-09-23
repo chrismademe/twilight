@@ -31,7 +31,12 @@ class HTMLAttribute {
             return '';
         }
 
-        return sprintf( '{%% if %s is not null %%}%s%s{%% endif %%}', $condition_value, $rendered_name, $rendered_value );
+        return sprintf(
+            '{%% if %s is not null %%}%s%s{%% endif %%}',
+            $condition_value,
+            $rendered_name,
+            $rendered_value
+        );
     }
 
     public function is_dynamic(): bool {
