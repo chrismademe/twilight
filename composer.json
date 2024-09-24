@@ -1,6 +1,5 @@
 {
 	"name": "chrismademe/twilight",
-	"version": "1.0.0",
 	"description": "Twig Preprocessor with an elegant syntax and component API",
 	"license": "MIT",
 	"autoload": {
