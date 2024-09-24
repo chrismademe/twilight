@@ -42,6 +42,8 @@ class Twig {
 			)
 		);
 
+		Events::dispatch( 'twig:instance', $this->instance );
+
 	}
 
 	/**
@@ -63,6 +65,13 @@ class Twig {
 	 * @return string Rendered template.
 	 */
 	public function render( string $template, array $context = [] ): string {
+
+		/**
+		 * Filter the context before render
+		 */
+		$context = Events::filter( 'render', $context );
+		$context = Events::filter( $template . ':render', $context );
+
 		return $this->instance->render( $template, $context );
 	}
 
@@ -74,12 +83,17 @@ class Twig {
 	 * @return void
 	 */
 	public function render_component( string $name, array|null $context = [] ) {
-		$path = str_replace( ['_', '.'], '/', $name );
 
 		/**
 		 * Filter the context before rendering the component.
 		 */
-		$context = Events::filter( $name . ':render', $context );
+		$context = Events::filter( 'component:render', $context );
+		$context = Events::filter( 'component:' . $name . ':render', $context );
+
+		/**
+		 * Convert sub component name to a path.
+		 */
+		$path = str_replace( ['_', '.'], '/', $name );
 
 		/**
 		 * If a custom callback is set, use it to render the component.
