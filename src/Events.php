@@ -29,13 +29,13 @@ class Events {
      * @param mixed $context
      * @return mixed
      */
-    public static function filter( string $name, ...$context ): mixed {
+    public static function filter( string $name, $context ): mixed {
         if ( ! isset( self::instance()->events[ $name ] ) ) {
             return $context;
         }
 
         foreach ( self::instance()->events[ $name ] as $callback ) {
-            $context = call_user_func_array( $callback, $context );
+            $context = call_user_func( $callback, $context );
         }
 
         return $context;
@@ -50,13 +50,13 @@ class Events {
      * @param mixed $context
      * @return void
      */
-    public static function dispatch( string $name, ...$context ): void {
+    public static function dispatch( string $name, $context ): void {
         if ( ! isset( self::instance()->events[ $name ] ) ) {
             return;
         }
 
         foreach ( self::instance()->events[ $name ] as $callback ) {
-            call_user_func_array( $callback, $context );
+            call_user_func( $callback, $context );
         }
     }
 
