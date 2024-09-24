@@ -1,1 +1,1 @@
-<img src="https://unsplash.it/ok" /><span>{{ 'Hello World' | raw }}</span>
+<img {% if 'https://unsplash.it/ok' is not null %}src="https://unsplash.it/ok"{% endif %} /><span>{{ 'Hello World' | raw }}</span>

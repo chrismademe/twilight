@@ -17,6 +17,6 @@ $result = compile(
 );
 
 echo render(
-    template: 'form.twig',
+    template: 'test.twig',
     context: []
 );

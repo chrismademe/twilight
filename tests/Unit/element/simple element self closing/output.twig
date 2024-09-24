@@ -1,1 +1,1 @@
-<img src="/my/image.png" alt="My image" />
+<img {% if '/my/image.png' is not null %}src="/my/image.png"{% endif %} {% if 'My image' is not null %}alt="My image"{% endif %} />

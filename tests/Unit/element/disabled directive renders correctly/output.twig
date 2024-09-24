@@ -1,1 +1,1 @@
-<input type="text" name="vat_number" {{ country != 'uk' ? 'disabled' : '' }} />
+<input {% if 'text' is not null %}type="text"{% endif %} {% if 'vat_number' is not null %}name="vat_number"{% endif %} {{ country != 'uk' ? 'disabled' : '' }} />
