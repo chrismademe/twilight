@@ -42,7 +42,7 @@ class Twig {
 			)
 		);
 
-		Events::dispatch( 'twig:instance', $this->instance );
+		Events::dispatch( 'twig:init', $this->instance );
 
 	}
 
