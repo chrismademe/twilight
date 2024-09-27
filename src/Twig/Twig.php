@@ -64,7 +64,7 @@ class Twig {
 	 * @param array $context Data to pass to the template.
 	 * @return string Rendered template.
 	 */
-	public function render( string $template, array $context = [] ): string {
+	public function render( string $template, array|null $context = [] ): string {
 
 		/**
 		 * Filter the context before render
