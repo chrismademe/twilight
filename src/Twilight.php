@@ -4,6 +4,7 @@ namespace Twilight;
 
 use Twilight\Compiler\Compiler;
 use Twilight\Directives;
+use Twilight\Directives\ConditionalAttributeDirective;
 use Twilight\Directives\AttributesDirective;
 use Twilight\Directives\CheckedDirective;
 use Twilight\Directives\DisabledDirective;
@@ -64,6 +65,7 @@ class Twilight {
         $directives = new Directives;
         $directives->register( 'if', IfDirective::class );
         $directives->register( 'unless', UnlessDirective::class );
+        $directives->register( 'attr', ConditionalAttributeDirective::class );
         $directives->register( 'attributes', AttributesDirective::class );
         $directives->register( 'for', ForDirective::class );
         $directives->register( 'html', HtmlDirective::class );

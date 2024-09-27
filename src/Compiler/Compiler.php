@@ -166,14 +166,14 @@ class Compiler {
      * @param array $hoisted_elements
      */
     private function compile_assets( string $parent_file, array $hoisted_elements ) {
-        $filename_without_extension = rtrim( $parent_file, '.twig' );
+        $filename_without_extension = str_replace( '.twig', '', $parent_file );
 
         /**
          * Remove the '/template' suffix from the filename if it exists.
          * Components usually have this.
          */
         if ( str_ends_with( $filename_without_extension, '/template' ) ) {
-            $filename_without_extension = rtrim( $filename_without_extension, '/template' );
+            $filename_without_extension = str_replace(  '/template', '', $filename_without_extension );
         }
 
         foreach ( $hoisted_elements as $element ) {
