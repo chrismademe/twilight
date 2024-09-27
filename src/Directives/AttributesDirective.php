@@ -43,25 +43,18 @@ class AttributesDirective extends Directive {
         return;
     }
 
-    public function tag( Component|HTMLElement $element ) {
-        if ( $element instanceof Component ) {
-            return;
-        }
-
-        $key = sprintf( '%s_merged_attributes', str_replace( '-', '_', $element->name ) );
-        return sprintf( ' {{ %s }}', $key );
-    }
-
     private function create_markup_for_html_element( HTMLElement $element, string $key, $attributes ): string {
         $markup = sprintf( '{%% set %s %%}', $key );
         $markup .= sprintf( '{%% if %s is iterable %%}', $attributes );
         $markup .= sprintf( '{%% for name, value in %s %%}', $attributes );
-        $markup .= '{% if value is not null %}{{ name }}="{{ value }}"{% endif %} ';
+        $markup .= '{{ name }}="{{ value }}" ';
         $markup .= '{% endfor %}';
         $markup .= '{% else %}';
         $markup .= sprintf( '{{ %s | raw }}', $attributes );
         $markup .= '{% endif %}';
-        $markup .= sprintf( '{%% endset %%}%s', PHP_EOL );
+        $markup .= sprintf( '{%% endset %%}' );
+
+        $element->set_attribute( sprintf( '{{ %s }}', $key ), null );
 
         return $markup;
     }
