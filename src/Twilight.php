@@ -94,7 +94,7 @@ class Twilight {
      * @param array $context Data to pass to the template.
      * @param bool $to_string Echo the template or return it.
      */
-    public static function render( string $template, array $context = [], bool $to_string = false ): string {
+    public static function render( string $template, array|null $context = [], bool $to_string = false ) {
         $twig = new Twig;
         $result = $twig->render( $template, $context );
 

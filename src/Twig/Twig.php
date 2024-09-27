@@ -111,7 +111,7 @@ class Twig {
 			);
 		}
 
-        return $this->render( 'components/' . $path . '/template.twig', $context );
+        return $this->render( 'components/' . $path . '/template.twig', $context ?? [], true );
 	}
 
     /**
