@@ -29,7 +29,7 @@ class Events {
      * @param mixed $context
      * @return mixed
      */
-    public static function filter( string $name, $context ): mixed {
+    public static function filter( string $name, $context = null ): mixed {
         if ( ! isset( self::instance()->events[ $name ] ) ) {
             return $context;
         }
@@ -50,7 +50,7 @@ class Events {
      * @param mixed $context
      * @return void
      */
-    public static function dispatch( string $name, $context ): void {
+    public static function dispatch( string $name, $context = null ): void {
         if ( ! isset( self::instance()->events[ $name ] ) ) {
             return;
         }
