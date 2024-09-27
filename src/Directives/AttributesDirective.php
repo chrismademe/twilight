@@ -27,7 +27,7 @@ class AttributesDirective extends Directive {
      * @param Component|HTMLElement $element
      */
     public function before( Component|HTMLElement $element ) {
-        $key = sprintf( '%s_attributes', str_replace( '-', '_', $element->name ) );
+        $key = sprintf( '%s_merged_attributes', str_replace( '-', '_', $element->name ) );
 
         $attributes = $element->get_attribute('@attributes')->value === true
             ? 'attributes'
@@ -43,6 +43,15 @@ class AttributesDirective extends Directive {
         return;
     }
 
+    public function tag( Component|HTMLElement $element ) {
+        if ( $element instanceof Component ) {
+            return;
+        }
+
+        $key = sprintf( '%s_merged_attributes', str_replace( '-', '_', $element->name ) );
+        return sprintf( ' {{ %s }}', $key );
+    }
+
     private function create_markup_for_html_element( HTMLElement $element, string $key, $attributes ): string {
         $markup = sprintf( '{%% set %s %%}', $key );
         $markup .= sprintf( '{%% if %s is iterable %%}', $attributes );
@@ -53,8 +62,6 @@ class AttributesDirective extends Directive {
         $markup .= sprintf( '{{ %s | raw }}', $attributes );
         $markup .= '{% endif %}';
         $markup .= sprintf( '{%% endset %%}%s', PHP_EOL );
-
-        $element->set_attribute( sprintf( '{{ %s | raw }}', $key ), null );
 
         return $markup;
     }

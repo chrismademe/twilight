@@ -10,14 +10,42 @@ class HTMLAttribute {
         return $this->$key;
     }
 
-    public function render(): string {
+    // public function render(): string {
+    //     $rendered_name = $this->is_dynamic()
+    //         ? substr( $this->name, 1 )
+    //         : $this->name;
+
+    //     $rendered_value = $this->is_dynamic()
+    //         ? sprintf( '="{{ %s }}"', $this->value )
+    //         : sprintf( '="%s"', $this->value );
+
+    //     $condition_value = $this->is_dynamic()
+    //         ? $this->value
+    //         : sprintf( "'%s'", $this->value );
+
+    //     if ( is_null($this->value) || $this->value === true ) {
+    //         $rendered_value = '';
+    //     }
+
+    //     if ( $this->value === false ) {
+    //         return '';
+    //     }
+
+    //     return sprintf(
+    //         '%s%s',
+    //         $rendered_name,
+    //         $rendered_value
+    //     );
+    // }
+
+    public function render(): array {
         $rendered_name = $this->is_dynamic()
             ? substr( $this->name, 1 )
             : $this->name;
 
         $rendered_value = $this->is_dynamic()
-            ? sprintf( '="{{ %s }}"', $this->value )
-            : sprintf( '="%s"', $this->value );
+            ? sprintf( '%s', $this->value )
+            : sprintf( '"%s"', $this->value );
 
         $condition_value = $this->is_dynamic()
             ? $this->value
@@ -31,12 +59,10 @@ class HTMLAttribute {
             return '';
         }
 
-        return sprintf(
-            '{%% if %s is not null %%}%s%s{%% endif %%}',
-            $condition_value,
-            $rendered_name,
-            $rendered_value
-        );
+        return [
+            'name' => $rendered_name,
+            'value' => $rendered_value
+        ];
     }
 
     public function is_dynamic(): bool {
