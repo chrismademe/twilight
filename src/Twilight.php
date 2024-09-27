@@ -57,7 +57,7 @@ class Twilight {
         /**
          * Set the Twig paths
          */
-        Twig::options( 'paths', [ $output ] );
+        Twig::option( 'paths', [ $output ] );
 
         if ( $if !== true ) return null;
 
