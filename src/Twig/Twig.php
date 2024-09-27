@@ -72,7 +72,7 @@ class Twig {
 		$context = Events::filter( 'render', $context );
 		$context = Events::filter( $template . ':render', $context );
 
-		return $this->instance->render( $template, $context );
+		return $this->instance->render( $template, $context ?? [] );
 	}
 
 	/**
