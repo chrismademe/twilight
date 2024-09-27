@@ -17,6 +17,7 @@ class Compiler {
     private array $hoisted = [];
     private Filesystem $input;
     private Filesystem $output;
+    private Filesystem|null $asset_output = null;
     private $timer;
 
     public function __construct() {
@@ -46,6 +47,19 @@ class Compiler {
     public function to( string $path ): Compiler {
         $this->options['output'] = $path;
         $this->output = new Filesystem( new LocalFilesystemAdapter( $path ) );
+        return $this;
+    }
+
+    /**
+     * To
+     *
+     * Set the output directory.
+     * @param string $path
+     * @return Compiler
+     */
+    public function assets_to( string $path ): Compiler {
+        $this->options['asset_output'] = $path;
+        $this->asset_output = new Filesystem( new LocalFilesystemAdapter( $path ) );
         return $this;
     }
 
@@ -164,11 +178,19 @@ class Compiler {
 
         foreach ( $hoisted_elements as $element ) {
             if ( $element->name === 'Script' ) {
-                $this->write_file( 'assets/' . $filename_without_extension . '/script.js', $element->children[0]->value );
+                $this->write_file(
+                    file: $filename_without_extension . '/script.js',
+                    output: $element->children[0]->value,
+                    type: 'asset'
+                );
             }
 
             if ( $element->name === 'Style' ) {
-                $this->write_file( 'assets/' . $filename_without_extension . '/style.css', $element->children[0]->value );
+                $this->write_file(
+                    file: $filename_without_extension . '/style.css',
+                    output: $element->children[0]->value,
+                    type: 'asset'
+                );
             }
         }
     }
@@ -179,13 +201,20 @@ class Compiler {
      * Write the file to the output directory. If the output directory does not exist, create it.
      *
      * @param string $file
+     * @param string $output
+     * @param string $type view|asset
      */
-    private function write_file( string $file, string $output ) {
+    private function write_file( string $file, string $output, string $type = 'view' ) {
         $output_directory = dirname( $file );
-        if ( ! $this->output->directoryExists( $output_directory ) ) {
-            $this->output->createDirectory( $output_directory );
+        $filesystem = $type === 'view' || $this->asset_output === null
+            ? $this->output
+            : $this->asset_output;
+
+        if ( ! $filesystem->directoryExists( $output_directory ) ) {
+            $filesystem->createDirectory( $output_directory );
         }
-        $this->output->write( $file, $output );
+
+        $filesystem->write( $file, $output );
     }
 
     /**
