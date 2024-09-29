@@ -8,3 +8,13 @@ foreach ( $tests as $test ) {
         expect($compiled_input)->toEqual($test['output']);
     });
 }
+
+test('reserved schema keys throw ReservedKeywordException', function () {
+    $schema = [
+        'attributes' => [ 'type' => 'array' ],
+        'id' => [ 'type' => 'string' ],
+    ];
+
+    expect(fn() => new Twilight\Component\ValidateProps('test', [], $schema))
+        ->toThrow(Twilight\Exception\ReservedKeywordException::class);
+});

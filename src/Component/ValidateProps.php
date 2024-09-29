@@ -3,17 +3,21 @@
 namespace Twilight\Component;
 
 use Twilight\Exception\InvalidPropException;
+use Twilight\Exception\ReservedKeywordException;
 
 class ValidateProps {
 
     private $schema_props = [];
     private $rest = [];
+    private array $reserved = [ 'attributes', 'children', 'slots' ];
 
     public function __construct(
         private string $name,
         private array $props = [],
         private array $schema = []
     ) {
+
+        $this->prevent_schema_containing_reserved_keys();
 
         foreach ( $this->props as $key => $value ) {
 
@@ -202,7 +206,15 @@ class ValidateProps {
     }
 
     private function is_reserved_key( string $key ) {
-        return in_array( $key, [ 'children', 'slots' ] );
+        return in_array( $key, $this->reserved );
+    }
+
+    private function prevent_schema_containing_reserved_keys() {
+        foreach ( $this->reserved as $keyword ) {
+            if ( array_key_exists( $keyword, $this->schema ) ) {
+                throw new ReservedKeywordException( sprintf( 'The key `%s` is a reserved keyword.', $keyword ) );
+            }
+        }
     }
 
 }
