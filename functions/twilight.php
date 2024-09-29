@@ -32,9 +32,22 @@ function classnames( array $classes ): string {
     return implode( ' ', $classes_to_render );
 }
 
-function make_element_attributes( array $attributes ): string {
+/**
+ * Make Element Attributes
+ *
+ * Conditionally returns a string of HTML attributes based on the given array.
+ * Given a string, it will return the string as is.
+ *
+ * @param array|string $attributes
+ * @return string
+ */
+function make_element_attributes( array|string $attributes ): string {
     if ( empty( $attributes ) ) {
         return '';
+    }
+
+    if ( is_string($attributes) ) {
+        return ' ' . $attributes;
     }
 
     $attributes_to_render = [];
