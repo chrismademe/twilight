@@ -35,6 +35,13 @@ class Twig {
 			)
 		);
 
+		$this->instance->addfunction(
+			new TwigFunction(
+				'make_element_attributes',
+				'\\Twilight\\make_element_attributes'
+			)
+		);
+
 		$this->instance->addFilter(
 			new TwigFilter(
 				'cls',

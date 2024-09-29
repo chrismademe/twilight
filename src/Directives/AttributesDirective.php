@@ -10,6 +10,8 @@ class AttributesDirective extends Directive {
     public string $name = 'attributes';
     public int $priority = 10;
 
+    private string $markup;
+
     /**
      * Should Run
      *
@@ -27,15 +29,14 @@ class AttributesDirective extends Directive {
      * @param Component|HTMLElement $element
      */
     public function before( Component|HTMLElement $element ) {
-        $key = sprintf( '%s_merged_attributes', str_replace( '-', '_', $element->name ) );
-
         $attributes = $element->get_attribute('@attributes')->value === true
             ? 'attributes'
             : $element->get_attribute('@attributes')->value;
 
         // If the element is an HTML element, we need to create a custom markup
         if ( $element instanceof HTMLElement ) {
-            return $this->create_markup_for_html_element($element, $key, $attributes);
+            $this->markup = sprintf( '{{ make_element_attributes(%s) | raw }}', $attributes );
+            return;
         }
 
         // If the element is a component, we can just set the attributes
@@ -43,20 +44,16 @@ class AttributesDirective extends Directive {
         return;
     }
 
-    private function create_markup_for_html_element( HTMLElement $element, string $key, $attributes ): string {
-        $markup = sprintf( '{%% set %s %%}', $key );
-        $markup .= sprintf( '{%% if %s is iterable %%}', $attributes );
-        $markup .= sprintf( '{%% for name, value in %s %%}', $attributes );
-        $markup .= '{{ name }}="{{ value }}" ';
-        $markup .= '{% endfor %}';
-        $markup .= '{% else %}';
-        $markup .= sprintf( '{{ %s | raw }}', $attributes );
-        $markup .= '{% endif %}';
-        $markup .= sprintf( '{%% endset %%}' );
-
-        $element->set_attribute( sprintf( '{{ %s }}', $key ), null );
-
-        return $markup;
+    /**
+     * Modify the markup of the element
+     *
+     * @param Component|HTMLElement $element
+     * @return string|void
+     */
+    public function tag( Component|HTMLElement $element ) {
+        if ( $element instanceof HTMLElement && ! empty( $this->markup ) ) {
+            return $this->markup;
+        }
     }
 
 }

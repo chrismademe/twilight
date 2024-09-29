@@ -31,3 +31,29 @@ function classnames( array $classes ): string {
 
     return implode( ' ', $classes_to_render );
 }
+
+function make_element_attributes( array $attributes ): string {
+    if ( empty( $attributes ) ) {
+        return '';
+    }
+
+    $attributes_to_render = [];
+
+    foreach ( $attributes as $attribute => $value ) {
+        $is_dynamic = str_starts_with( $attribute, ':' );
+
+        if ( $value === false || $value === null ) {
+            continue;
+        }
+
+        if ( $value === true ) {
+            $attributes_to_render[] = $attribute;
+            continue;
+        }
+
+        $name = $is_dynamic ? substr( $attribute, 1 ) : $attribute;
+        $attributes_to_render[] = sprintf( '%s="%s"', $name, $value );
+    }
+
+    return ' ' . implode( ' ', $attributes_to_render );
+}

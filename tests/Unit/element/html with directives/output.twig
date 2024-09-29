@@ -1,1 +1,1 @@
-{% if shouldShowMessage %}<div><p>{{ 'Hello World' | raw }}</p></div>{% endif %}
+{% if shouldShowMessage %}<div{{ make_element_attributes({ }) | raw }}><p{{ make_element_attributes({ }) | raw }}>{{ 'Hello World' | raw }}</p></div>{% endif %}

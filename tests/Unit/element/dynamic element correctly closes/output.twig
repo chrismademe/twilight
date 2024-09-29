@@ -1,1 +1,1 @@
-<img {% if 'https://unsplash.it/ok' is not null %}src="https://unsplash.it/ok"{% endif %} /><span>{{ 'Hello World' | raw }}</span>
+<img{{ make_element_attributes({  "src": "https://unsplash.it/ok", }) | raw }} /><span{{ make_element_attributes({ }) | raw }}>{{ 'Hello World' | raw }}</span>

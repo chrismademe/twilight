@@ -11,30 +11,20 @@ class HTMLAttribute {
     }
 
     public function render(): string {
-        $rendered_name = $this->is_dynamic()
-            ? substr( $this->name, 1 )
-            : $this->name;
+        // $rendered_name = $this->is_dynamic()
+        //     ? substr( $this->name, 1 )
+        //     : $this->name;
 
-        $rendered_value = $this->is_dynamic()
-            ? sprintf( '="{{ %s }}"', $this->value )
-            : sprintf( '="%s"', $this->value );
+        // $rendered_value = $this->is_dynamic()
+        //     ? sprintf( '="{{ %s }}"', $this->value )
+        //     : sprintf( '="%s"', $this->value );
 
-        $condition_value = $this->is_dynamic()
-            ? $this->value
-            : sprintf( "'%s'", $this->value );
-
-        if ( is_null($this->value) || $this->value === true ) {
-            $rendered_value = '';
-        }
-
-        if ( $this->value === false ) {
-            return '';
-        }
+        $value = $this->is_dynamic() ? $this->value : sprintf( '"%s"', $this->value );
 
         return sprintf(
-            '%s%s',
-            $rendered_name,
-            $rendered_value
+            '"%s": %s, ',
+            $this->name,
+            $value
         );
     }
 

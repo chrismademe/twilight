@@ -1,1 +1,1 @@
-<p {% if 'text-sm text-gray-500' is not null %}class="text-sm text-gray-500"{% endif %}>Hello World</p>
+<p{{ make_element_attributes({  "class": "text-sm text-gray-500", }) | raw }}>Hello World</p>

@@ -2,6 +2,7 @@
 
 use Twilight\Twilight;
 use Twilight\Twig\Twig;
+use function Twilight\make_element_attributes;
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);

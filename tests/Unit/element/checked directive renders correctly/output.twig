@@ -1,1 +1,1 @@
-<input {% if 'checkbox' is not null %}type="checkbox"{% endif %} {% if 'notifications' is not null %}name="notifications"{% endif %} {{ checked ? 'checked' : '' }} />
+<input{{ make_element_attributes({  "type": "checkbox",  "name": "notifications", }) | raw }} {{ checked ? 'checked' : '' }} />

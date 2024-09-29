@@ -23,11 +23,15 @@ class HTMLElement implements NodeInterface {
             : sprintf( '<%s', $this->name );
 
         if ( $this->has_attributes() ) {
+            $markup .= sprintf( '{{ make_element_attributes({ ', $this->name );
+
             foreach ( $this->attributes as $attribute ) {
                 if ( $this->is_compiler_attribute($attribute->name) ) continue; // Skip compiler attributes
                 if ( $this->is_directive($attribute->name) ) continue; // Skip directives
                 $markup .= sprintf( ' %s', $attribute->render());
             }
+
+            $markup .= '}) | raw }}';
         }
 
         $markup .= $this->process_directives('tag');

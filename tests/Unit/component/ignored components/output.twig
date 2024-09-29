@@ -1,1 +1,1 @@
-<InnerBlocks {% if esc_attr( json_encode( ['core/paragraph'] ) ) is not null %}template="{{ esc_attr( json_encode( ['core/paragraph'] ) ) }}"{% endif %} />
+<InnerBlocks{{ make_element_attributes({  ":template": esc_attr( json_encode( ['core/paragraph'] ) ), }) | raw }} />
