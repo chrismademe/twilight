@@ -49,8 +49,8 @@ class Component implements NodeInterface {
             : sprintf( '"%s"', $this->render_name );
 
         $path = $this->has_dynamic_name()
-            ? sprintf( '"components/" ~ %s ~ "/template.twig"', str_replace( '.', '/', $this->render_name ) )
-            : sprintf( '"components/%s/template.twig"', str_replace( '.', '/', $this->render_name ) );
+            ? sprintf( '"components/" ~ %s ~ "/template.twig"', str_replace( ['_', '.'], '/', $this->render_name ) )
+            : sprintf( '"components/%s/template.twig"', str_replace( ['_', '.'], '/', $this->render_name ) );
 
         $markup .= sprintf( '{%% include %s', $path );
         $attributes = []; // Keep track of rendered attributes
