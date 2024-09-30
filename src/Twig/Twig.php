@@ -103,11 +103,11 @@ class Twig {
 	 * Conditionally returns a string of HTML attributes based on the given array.
 	 * Given a string, it will return the string as is.
 	 *
-	 * @param array|string $attributes
+	 * @param array|string|null $attributes
 	 * @return string
 	 */
-	public function make_element_attributes( array|string $attributes ): string {
-		if ( empty( $attributes ) ) {
+	public function make_element_attributes( array|string|null $attributes ): string {
+		if ( empty( $attributes ) || is_null( $attributes ) ) {
 			return '';
 		}
 
