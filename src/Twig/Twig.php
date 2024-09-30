@@ -7,7 +7,6 @@ use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 use Twig\TwigFilter;
 use Twilight\Events;
-use function Twilight\classnames;
 
 class Twig {
 
@@ -29,8 +28,8 @@ class Twig {
 
 		$this->instance->addFunction(
 			new TwigFunction(
-				'render_component',
-				[ $this, 'render_component' ],
+				'get_component_context',
+				[ $this, 'get_component_context' ],
 				[ 'is_safe' => [ 'html' ] ]
 			)
 		);
@@ -38,7 +37,8 @@ class Twig {
 		$this->instance->addfunction(
 			new TwigFunction(
 				'make_element_attributes',
-				'\\Twilight\\make_element_attributes'
+				[ $this, 'make_element_attributes' ],
+				[ 'is_safe' => [ 'html' ] ]
 			)
 		);
 
@@ -83,42 +83,57 @@ class Twig {
 	}
 
 	/**
-	 * Render a Component
+	 * Get Component Context
 	 *
-	 * @param string $name Component name.
-	 * @param array|null $context Context to pass to the component.
-	 * @return void
+	 * Takes the props being passed to a component include and passes them
+	 * through a filter to allow for modification of the context.
+	 *
+	 * @param string $name Component name
+	 * @param array|null $context Component context
 	 */
-	public function render_component( string $name, array|null $context = [] ) {
-
-		/**
-		 * Filter the context before rendering the component.
-		 */
+	public function get_component_context( string $name, $context ) {
 		$context = Events::filter( 'component:render', $context );
 		$context = Events::filter( 'component:' . $name . ':render', $context );
+		return $context;
+	}
 
-		/**
-		 * Convert sub component name to a path.
-		 */
-		$path = str_replace( ['_', '.'], '/', $name );
-
-		/**
-		 * If a custom callback is set, use it to render the component.
-		 */
-		if (
-			isset( self::$options['render_component_callback'] )
-			&& is_callable( self::$options['render_component_callback'] )
-		) {
-			return call_user_func(
-				self::$options['render_component_callback'],
-				$name,
-				$path,
-				$context,
-				$this
-			);
+	/**
+	 * Make Element Attributes
+	 *
+	 * Conditionally returns a string of HTML attributes based on the given array.
+	 * Given a string, it will return the string as is.
+	 *
+	 * @param array|string $attributes
+	 * @return string
+	 */
+	public function make_element_attributes( array|string $attributes ): string {
+		if ( empty( $attributes ) ) {
+			return '';
 		}
 
-        return $this->render( 'components/' . $path . '/template.twig', $context ?? [], true );
+		if ( is_string($attributes) ) {
+			return ' ' . $attributes;
+		}
+
+		$attributes_to_render = [];
+
+		foreach ( $attributes as $attribute => $value ) {
+			$is_dynamic = str_starts_with( $attribute, ':' );
+
+			if ( $value === false || $value === null ) {
+				continue;
+			}
+
+			if ( $value === true ) {
+				$attributes_to_render[] = $attribute;
+				continue;
+			}
+
+			$name = $is_dynamic ? substr( $attribute, 1 ) : $attribute;
+			$attributes_to_render[] = sprintf( '%s="%s"', $name, $value );
+		}
+
+		return ' ' . implode( ' ', $attributes_to_render );
 	}
 
     /**

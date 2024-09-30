@@ -48,7 +48,11 @@ class Component implements NodeInterface {
             ? $this->render_name
             : sprintf( '"%s"', $this->render_name );
 
-        $markup .= sprintf( '{{ render_component(%s', $name );
+        $path = $this->has_dynamic_name()
+            ? sprintf( '"components/" ~ %s ~ "/template.twig"', str_replace( '.', '/', $this->render_name ) )
+            : sprintf( '"components/%s/template.twig"', str_replace( '.', '/', $this->render_name ) );
+
+        $markup .= sprintf( '{%% include %s', $path );
         $attributes = []; // Keep track of rendered attributes
 
         if ( $this->has_attributes() ) {
@@ -56,12 +60,12 @@ class Component implements NodeInterface {
                 if ( $this->is_directive($attribute->name) ) continue; // Skip directives
                 $attributes[] = $attribute->render();
             }
-            $markup .= empty($attributes) ? '' : ', { ';
+            $markup .= empty($attributes) ? '' : sprintf( ' with get_component_context(%s, { ', $name );
             $markup .= implode(', ', $attributes);
         }
 
         if ( empty($attributes) && ( $this->has_slots() || $this->has_children() ) ) {
-            $markup .= ', { ';
+            $markup .= sprintf( ' with get_component_context(%s, { ', $name );
         }
 
         if ( ! empty($attributes) && ( $this->has_slots() || $this->has_children() ) ) {
@@ -81,10 +85,10 @@ class Component implements NodeInterface {
         }
 
         if ( ! empty($attributes) || $this->has_children() || $this->has_slots() ) {
-            $markup .= ' }';
+            $markup .= ' }) only';
         }
 
-        $markup .= ') }}';
+        $markup .= ' %}';
 
         $markup .= $this->process_directives('after');
         $markup .= $this->process_directives('cleanup');
