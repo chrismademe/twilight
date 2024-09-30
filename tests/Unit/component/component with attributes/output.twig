@@ -1,1 +1,1 @@
-{{ render_component("CustomComponent", { "size": "sm", "class": "text-gray-500" }) }}
+{% include "components/CustomComponent/template.twig" with get_component_context("CustomComponent", { "size": "sm", "class": "text-gray-500" }) only %}

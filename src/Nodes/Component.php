@@ -85,10 +85,10 @@ class Component implements NodeInterface {
         }
 
         if ( ! empty($attributes) || $this->has_children() || $this->has_slots() ) {
-            $markup .= ' }) only';
+            $markup .= ' })';
         }
 
-        $markup .= ' %}';
+        $markup .= ' only %}';
 
         $markup .= $this->process_directives('after');
         $markup .= $this->process_directives('cleanup');

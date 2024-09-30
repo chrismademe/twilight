@@ -1,1 +1,1 @@
-{{ render_component("Checkbox", { "name": "notifications", "label": "Notifications", "checked": user.wantsNotifications }) }}
+{% include "components/Checkbox/template.twig" with get_component_context("Checkbox", { "name": "notifications", "label": "Notifications", "checked": user.wantsNotifications }) only %}

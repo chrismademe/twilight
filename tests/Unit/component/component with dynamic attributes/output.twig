@@ -1,1 +1,1 @@
-{{ render_component("CustomComponent", { "size": isStack ? 'md' : 'sm', "class": "text-gray-500" }) }}
+{% include "components/CustomComponent/template.twig" with get_component_context("CustomComponent", { "size": isStack ? 'md' : 'sm', "class": "text-gray-500" }) only %}

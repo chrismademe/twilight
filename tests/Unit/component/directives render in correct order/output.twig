@@ -1,4 +1,4 @@
 {% if thing %}{% for item in things %}{% set MyComponent_children %}
 {{ item }}
 {% endset %}
-{{ render_component("MyComponent", { "children": MyComponent_children }) }}{% endfor %}{% endif %}
+{% include "components/MyComponent/template.twig" with get_component_context("MyComponent", { "children": MyComponent_children }) only %}{% endfor %}{% endif %}
