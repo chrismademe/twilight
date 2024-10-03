@@ -93,7 +93,7 @@ class Twig {
 	 */
 	public function get_component_context( string $name, $context ) {
 		$context = Events::filter( 'component:render', $context );
-		$context = Events::filter( 'component:' . $name . ':render', $context );
+		$context = Events::filter( 'component:' . str_replace( '_', '.', $name ) . ':render', $context );
 		return $context;
 	}
 
