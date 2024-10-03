@@ -273,6 +273,19 @@ class Compiler {
                 }
             }
         }
+
+        /**
+         * If it's not empty, try again.
+         */
+        $is_empty = empty(
+            $this->output->listContents('', true)
+                ->sortByPath()
+                ->toArray()
+        );
+
+        if ( ! $is_empty ) {
+            $this->clear_dist();
+        }
     }
 
     /**
