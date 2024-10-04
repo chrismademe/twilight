@@ -1,1 +1,1 @@
-{% include "components/CustomComponent/template.twig" only %}
+{% include "components/CustomComponent/template.twig" with get_component_context("CustomComponent", {  }) only %}
