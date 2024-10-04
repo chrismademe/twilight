@@ -92,6 +92,19 @@ class Twig {
 	 * @param array|null $context Component context
 	 */
 	public function get_component_context( string $name, $context ) {
+
+		/**
+		 * Handle empty attributes, which in Components should be treated
+		 * as if they were true
+		 */
+		if ( is_array( $context ) && ! empty( $context ) ) {
+			foreach ( $context as $key => $value ) {
+				if ( $value === '__empty__' ) {
+					$context[ $key ] = true;
+				}
+			}
+		}
+
 		$context = Events::filter( 'component:render', $context );
 		$context = Events::filter( 'component:' . str_replace( '_', '.', $name ) . ':render', $context );
 		return $context;
@@ -124,8 +137,8 @@ class Twig {
 				continue;
 			}
 
-			if ( $value === true ) {
-				$attributes_to_render[] = $attribute;
+			if ( $value === '__empty__' || $value === true ) {
+				$attributes_to_render[] = $is_dynamic ? substr( $attribute, 1 ) : $attribute;
 				continue;
 			}
 

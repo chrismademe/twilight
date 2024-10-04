@@ -29,7 +29,7 @@ class AttributesDirective extends Directive {
      * @param Component|HTMLElement $element
      */
     public function before( Component|HTMLElement $element ) {
-        $attributes = $element->get_attribute('@attributes')->value === true
+        $attributes = $element->get_attribute('@attributes')->value === '__empty__'
             ? 'attributes'
             : $element->get_attribute('@attributes')->value;
 

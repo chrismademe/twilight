@@ -11,14 +11,6 @@ class HTMLAttribute {
     }
 
     public function render(): string {
-        // $rendered_name = $this->is_dynamic()
-        //     ? substr( $this->name, 1 )
-        //     : $this->name;
-
-        // $rendered_value = $this->is_dynamic()
-        //     ? sprintf( '="{{ %s }}"', $this->value )
-        //     : sprintf( '="%s"', $this->value );
-
         $value = $this->is_dynamic() ? $this->value : sprintf( '"%s"', $this->value );
 
         return sprintf(

@@ -132,14 +132,15 @@ class Tokenizer {
             );
 
             foreach ( $matches as $attr ) {
-
-                // Check for double quoted, single quoted, curly brace or unquoted attribute values
-                $value = $attr[3] ?? $attr[4] ?? $attr[5] ?? $attr[6] ?? true;
-
-                // If the attribute value is null, remove it
-                if ($value === "null") continue;
-
-                $attributes[ $attr[1] ] = $value;
+                /**
+                 * Set a flag for empty values
+                 *
+                 * We use this in other areas of the compile process to make sure we treat
+                 * attributes as you would expect in HTML. For example, if an attribute is
+                 * empty, we simply render it without a value on an HTML element, but for
+                 * components, we pass it in as `true`
+                 */
+                $attributes[ $attr[1] ] = $attr[3] ?? '__empty__';
             }
         }
 
