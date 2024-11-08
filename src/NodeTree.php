@@ -9,6 +9,7 @@ use Twilight\Nodes\HTMLComment;
 use Twilight\Nodes\HTMLElement;
 use Twilight\Nodes\Text;
 use Twilight\Nodes\TwigComment;
+use Exception;
 
 class NodeTree {
 
@@ -85,7 +86,16 @@ class NodeTree {
                 in_array( $element['type'], ['self-closing-component', 'component'] )
                 && $element['name'] === 'Children'
             ) {
-                $pieces[] = new Text('{{ children | raw }}');
+                $render = '{{ children | raw }}';
+
+                /**
+                 * If the Children component references a slot, render that
+                 */
+                if ( isset($element['attributes']) && isset($element['attributes']['slot']) ) {
+                    $render = sprintf( '{{ slots.%s | raw }}', $element['attributes']['slot'] );
+                }
+
+                $pieces[] = new Text($render);
                 continue;
             }
 

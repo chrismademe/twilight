@@ -16,14 +16,3 @@ Twilight::compile(
     output: __DIR__ . '/demo/dist',
     assets: __DIR__ . '/demo/assets'
 );
-
-Twilight::find( __DIR__ . '/demo/src', 'test.twig' );
-
-Twilight::render(
-    template: 'test.twig',
-    context: [
-        'block' => [
-            'tagName' => 'div'
-        ],
-    ]
-);
